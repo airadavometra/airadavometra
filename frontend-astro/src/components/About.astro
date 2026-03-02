@@ -1,0 +1,112 @@
+---
+import { client, urlFor } from "../lib/sanity";
+import WidthContainer from "./WidthContainer.astro";
+import DownloadCvButton from "./DownloadCvButton.astro";
+
+const data = await client.fetch(`*[_type == "homePage"][0] { 
+  aboutMeImage,
+  aboutMeTitle,
+  aboutMeSubtitle,
+  aboutMeDescription,
+  "cvUrl": cvFile.asset->url,
+}`);
+
+const {
+  aboutMeImage,
+  aboutMeTitle,
+  aboutMeSubtitle,
+  aboutMeDescription,
+  cvUrl,
+} = data || {};
+---
+
+<WidthContainer>
+  <section id="about" class="about-section">
+    <div class="image-wrapper">
+      {
+        aboutMeImage && (
+          <img src={urlFor(aboutMeImage).url()} alt={aboutMeImage.alt || ""} />
+        )
+      }
+    </div>
+
+    <div class="content-wrapper">
+      <div class="title-wrapper">
+        {aboutMeTitle && <h2 class="title">{aboutMeTitle}</h2>}
+        {aboutMeSubtitle && <p class="subtitle">{aboutMeSubtitle}</p>}
+      </div>
+      {
+        aboutMeDescription
+          ?.split("\n")
+          .map(
+            (paragraph: string) =>
+              paragraph && <p class="description">{paragraph}</p>,
+          )
+      }
+      <div class="cta-button-wrapper">
+        <DownloadCvButton cvUrl={cvUrl} />
+      </div>
+    </div>
+  </section>
+</WidthContainer>
+
+<style>
+  .about-section {
+    margin-top: calc(var(--spacing-64) * -1);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-128);
+  }
+
+  .image-wrapper {
+    width: 100%;
+    max-width: 500px;
+  }
+
+  .content-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-32);
+  }
+
+  .title-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-8);
+  }
+
+  .title {
+    font-size: var(--font-size-32-40);
+    font-weight: 700;
+  }
+  .subtitle {
+    font-size: var(--font-size-16-20);
+    font-weight: 600;
+  }
+  .description {
+    font-size: var(--font-size-16-20);
+    font-weight: 400;
+  }
+
+  .cta-button-wrapper {
+    margin-top: var(--spacing-16);
+  }
+
+  @media (max-width: 48rem) {
+    .about-section {
+      margin-top: unset;
+      flex-direction: column-reverse;
+      gap: var(--spacing-32);
+    }
+
+    .image-wrapper {
+      margin-left: auto;
+      width: 80%;
+      transform: scaleX(-1);
+    }
+
+    .cta-button-wrapper {
+      margin-bottom: var(--spacing-16);
+    }
+  }
+</style>

@@ -15,6 +15,7 @@ html {
   --font-size-20-24: clamp(1.25rem, 1.1771rem + 0.299vw, 1.5rem);
   --font-size-24-32: clamp(1.5rem, 1.1429rem + 1.7857vw, 2rem);
   --font-size-24-40: clamp(1.5rem, 1.2085rem + 1.1958vw, 2.5rem);
+  --font-size-32-40: clamp(2rem, 1.8543rem + 0.5979vw, 2.5rem);
   --font-size-32-48: clamp(2rem, 1.2857rem + 3.5714vw, 3rem);
 
   --spacing-4: min(0.25rem, 4px);

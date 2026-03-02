@@ -3,7 +3,7 @@ import WidthContainer from "./WidthContainer.astro";
 import MenuIcon from "./icons/Menu.astro";
 import LinkedinIcon from "./icons/Linkedin.astro";
 import GithubIcon from "./icons/Github.astro";
-import DownloadIcon from "./icons/Download.astro";
+import DownloadCvButton from "./DownloadCvButton.astro";
 import { client } from "../lib/sanity";
 
 const data = await client.fetch(
@@ -59,20 +59,7 @@ const { githubLink, linkedinLink, cvUrl } = data || {};
             </a>
           )
         }
-        {
-          cvUrl && (
-            <a
-              href={`${cvUrl}?filename="Daria Artemova CV.pdf"}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="download-cv"
-              aria-label="Download CV"
-            >
-              <DownloadIcon class="icon" />
-              Download CV
-            </a>
-          )
-        }
+        {cvUrl && <DownloadCvButton cvUrl={cvUrl} />}
       </div>
     </div>
   </WidthContainer>
@@ -149,27 +136,12 @@ const { githubLink, linkedinLink, cvUrl } = data || {};
     display: none;
   }
 
-  .download-cv {
-    padding: var(--spacing-6) var(--spacing-16);
-    padding-right: var(--spacing-24);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--spacing-16);
-    border: 1px solid var(--black);
-    cursor: pointer;
-  }
-
   @media (max-width: 48rem) {
     .desktop-only {
       display: none;
     }
     .mobile-only {
       display: block;
-    }
-    .download-cv {
-      padding: var(--spacing-6) var(--spacing-12);
-      padding-right: var(--spacing-16);
     }
   }
 </style>

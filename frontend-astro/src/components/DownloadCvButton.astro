@@ -1,0 +1,55 @@
+---
+import DownloadIcon from "./icons/Download.astro";
+
+interface Props {
+  cvUrl?: string;
+}
+
+const { cvUrl } = Astro.props;
+---
+
+{
+  cvUrl && (
+    <a
+      href={`${cvUrl}?filename="Daria Artemova CV.pdf"`}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="download-cv"
+      aria-label="Download CV"
+    >
+      <DownloadIcon class="icon" />
+      <slot>Download CV</slot>
+    </a>
+  )
+}
+
+<style>
+  .download-cv {
+    width: fit-content;
+    padding: var(--spacing-6) var(--spacing-16);
+    padding-right: var(--spacing-24);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-16);
+    border: 1px solid var(--black);
+    font-size: var(--font-size-16-20);
+    font-weight: 600;
+    transition: all 0.2s ease;
+  }
+
+  .download-cv:hover {
+  }
+
+  .icon {
+    width: var(--font-size-24-32);
+    height: var(--font-size-24-32);
+  }
+
+  @media (max-width: 48rem) {
+    .download-cv {
+      padding: var(--spacing-6) var(--spacing-12);
+      padding-right: var(--spacing-16);
+    }
+  }
+</style>
