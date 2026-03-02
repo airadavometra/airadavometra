@@ -1,0 +1,173 @@
+---
+import { client } from "../lib/sanity";
+import WidthContainer from "./WidthContainer.astro";
+
+const data = await client.fetch(`*[_type == "homePage"][0] { 
+  experience,
+  skills[]{
+    name,
+    "iconUrl": icon.asset->url
+  },
+  experienceYears
+}`);
+
+const { experience = [], skills = [], experienceYears } = data || {};
+---
+
+<WidthContainer>
+  <div class="experience-skills-container">
+    <section id="experience" class="experience-section">
+      <div class="experience-header">
+        <h2 class="section-title">Experience</h2>
+        {
+          experienceYears && (
+            <span class="experience-years">{experienceYears}+ years</span>
+          )
+        }
+      </div>
+
+      <div class="experience-list">
+        {
+          experience.map((item: any) => (
+              <span class="experience-duration">{item.duration}</span>
+              <div class="experience-content">
+                <h3 class="experience-job-title">{item.title}</h3>
+                {item.description && (
+                  <div class="experience-description">
+                    {item.description.split("\n").map((p: string) => (
+                      <p>{p}</p>
+                    ))}
+                  </div>
+                )}
+              </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <section id="skills" class="skills-section">
+      <h2 class="section-title">Skills</h2>
+
+      <ul class="skills-grid">
+        {
+          skills.map((skill: any) => (
+            <li class="skill-item">
+              {skill.iconUrl && (
+                <div
+                  class="skill-icon"
+                  set:html={fetch(skill.iconUrl).then((res) => res.text())}
+                />
+              )}
+              <span class="skill-name">{skill.name}</span>
+            </li>
+          ))
+        }
+      </ul>
+
+      <p class="skills-note">* Adaptable to new tech stacks</p>
+    </section>
+  </div>
+</WidthContainer>
+
+<style>
+  .experience-skills-container {
+    display: flex;
+    gap: var(--spacing-128);
+  }
+
+  .experience-section {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-32);
+  }
+
+  .skills-section {
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-32);
+  }
+
+  .section-title {
+    font-size: var(--font-size-32-40);
+    font-weight: 700;
+  }
+
+  .experience-header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-32);
+  }
+  .experience-years {
+    font-size: var(--font-size-32-40);
+    font-weight: 700;
+    color: var(--grey);
+  }
+
+  .experience-list {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: var(--spacing-24);
+  }
+  .experience-duration {
+    font-size: var(--font-size-20-24);
+    font-weight: 600;
+    color: var(--blue);
+  }
+  .experience-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-12);
+  }
+  .experience-job-title {
+    font-size: var(--font-size-20-24);
+    font-weight: 600;
+  }
+
+  .skills-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-24) var(--spacing-48);
+  }
+
+  .skill-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-12);
+    font-size: var(--font-size-16-24);
+  }
+
+  .skill-icon {
+    width: var(--font-size-24-32);
+    height: var(--font-size-24-32);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .skill-icon :global(svg) {
+    width: 100%;
+    height: 100%;
+  }
+
+  .skills-note {
+    font-size: var(--font-size-14-16);
+    font-style: italic;
+  }
+
+  @media (max-width: 48rem) {
+    .experience-skills-container {
+      flex-direction: column;
+      gap: var(--spacing-64);
+    }
+    .experience-list {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-24);
+    }
+    .experience-content {
+        margin-top: calc(var(--spacing-16) * -1);
+    }
+  }
+</style>

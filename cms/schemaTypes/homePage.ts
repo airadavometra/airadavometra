@@ -97,6 +97,11 @@ export const homePage = defineType({
       rows: 5,
     }),
     defineField({
+      name: 'experienceYears',
+      title: 'Experience Years',
+      type: 'number',
+    }),
+    defineField({
       name: 'experience',
       title: 'Experience',
       type: 'array',

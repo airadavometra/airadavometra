@@ -98,7 +98,7 @@ const { githubLink, linkedinLink, cvUrl } = data || {};
   .actions {
     display: flex;
     align-items: center;
-    gap: var(--spacing-16);
+    gap: var(--spacing-32);
   }
 
   .icon-link {
@@ -142,6 +142,9 @@ const { githubLink, linkedinLink, cvUrl } = data || {};
     }
     .mobile-only {
       display: block;
+    }
+    .actions {
+      gap: var(--spacing-16);
     }
   }
 </style>
