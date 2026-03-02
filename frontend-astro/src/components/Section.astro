@@ -1,0 +1,10 @@
+---
+import WidthContainer from "./WidthContainer.astro";
+const { id } = Astro.props;
+---
+
+<section id={id}>
+  <WidthContainer>
+    <slot />
+  </WidthContainer>
+</section>

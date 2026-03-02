@@ -1,9 +1,50 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import Section from "../components/Section.astro";
 ---
 
 <Layout>
-	<main>
-		<h1>New website</h1>
-	</main>
+  <Header>
+    {/* Navigation placeholder */}
+  </Header>
+  <main class="main">
+    <Section id="hero">
+      <h1>Hero</h1>
+    </Section>
+
+    <Section id="about">
+      <h2>About</h2>
+    </Section>
+
+    <Section id="experience">
+      <h2>Experience</h2>
+    </Section>
+
+    <Section id="projects">
+      <h2>Pet Projects</h2>
+    </Section>
+
+    <Section id="contacts">
+      <h2>Contacts</h2>
+    </Section>
+  </main>
+  <Footer>
+    {/* Footer placeholder */}
+  </Footer>
 </Layout>
+
+<style>
+  .main {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-64);
+  }
+
+  @media (min-width: 48rem) {
+    .main {
+      gap: var(--spacing-128);
+    }
+  }
+</style>

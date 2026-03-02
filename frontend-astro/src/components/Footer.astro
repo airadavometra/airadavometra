@@ -1,0 +1,46 @@
+---
+import WidthContainer from "./WidthContainer.astro";
+import Heart from "./icons/Heart.astro";
+---
+
+<footer class="footer">
+  <WidthContainer>
+    <div class="footer-content">
+      <p class="made-with">
+        Made with <Heart class="heart-icon" /> by Daria
+      </p>
+      <p class="year">2026</p>
+    </div>
+  </WidthContainer>
+</footer>
+
+<style>
+  .footer {
+    padding: 8px 0;
+    font-size: var(--font-size-14-16);
+    font-weight: 400;
+  }
+
+  @media (min-width: 48rem) {
+    .footer {
+      padding: 12px 0;
+    }
+  }
+
+  .footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .made-with {
+    display: flex;
+    align-items: center;
+    gap: 0.5ch;
+  }
+
+  .heart-icon {
+    width: var(--font-size-20-24);
+    height: var(--font-size-20-24);
+  }
+</style>
