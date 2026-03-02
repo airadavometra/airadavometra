@@ -1,17 +1,180 @@
 ---
 import WidthContainer from "./WidthContainer.astro";
+import MenuIcon from "./icons/Menu.astro";
+import LinkedinIcon from "./icons/Linkedin.astro";
+import GithubIcon from "./icons/Github.astro";
+import DownloadIcon from "./icons/Download.astro";
+import { client } from "../lib/sanity";
+
+const data = await client.fetch(
+  `*[_type == "homePage"][0] { 
+    githubLink, 
+    linkedinLink, 
+    "cvUrl": cvFile.asset->url
+  }`,
+);
+const { githubLink, linkedinLink, cvUrl } = data || {};
 ---
 
-<header>
+<header class="header">
   <WidthContainer>
-    <slot />
+    <div class="header-content">
+      <nav class="navigation desktop-only">
+        <a href="#experience" class="nav-link">Experience</a>
+        <a href="#skills" class="nav-link">Skills</a>
+        <a href="#projects" class="nav-link">Pet Projects</a>
+        <a href="#contacts" class="nav-link">Contact</a>
+      </nav>
+
+      <div class="mobile-only">
+        <button class="menu-button" aria-label="Menu">
+          <MenuIcon class="icon" />
+        </button>
+      </div>
+
+      <div class="actions">
+        {
+          githubLink && (
+            <a
+              href={githubLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="GitHub"
+              class="icon-link"
+            >
+              <GithubIcon class="icon" />
+            </a>
+          )
+        }
+        {
+          linkedinLink && (
+            <a
+              href={linkedinLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="LinkedIn"
+              class="icon-link"
+            >
+              <LinkedinIcon class="icon" />
+            </a>
+          )
+        }
+        {
+          cvUrl && (
+            <a
+              href={`${cvUrl}?filename="Daria Artemova CV.pdf"}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="download-cv"
+              aria-label="Download CV"
+            >
+              <DownloadIcon class="icon" />
+              Download CV
+            </a>
+          )
+        }
+      </div>
+    </div>
   </WidthContainer>
 </header>
 
 <style>
-  header {
+  .header {
     position: sticky;
     top: 0;
     z-index: 100;
+    background-color: var(--white);
+    font-size: var(--font-size-16-20);
+    font-weight: 600;
+  }
+
+  .header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-16) 0;
+  }
+
+  .navigation {
+    display: flex;
+    gap: var(--spacing-32);
+  }
+
+  .nav-link {
+    transition: background-color 0.2s ease;
+  }
+
+  .nav-link:hover {
+  }
+
+  .actions {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-16);
+  }
+
+  .icon-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+  }
+
+  .icon-link:hover {
+  }
+
+  .menu-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+  }
+
+  .menu-button:hover {
+  }
+
+  .icon {
+    width: var(--font-size-24-32);
+    height: var(--font-size-24-32);
+  }
+
+  .desktop-only {
+    display: flex;
+  }
+
+  .mobile-only {
+    display: none;
+  }
+
+  .download-cv {
+    margin-left: var(--spacing-8);
+    padding: var(--spacing-6) var(--spacing-16);
+    padding-right: var(--spacing-24);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-16);
+    border: 1px solid var(--black);
+    cursor: pointer;
+  }
+
+  @media (max-width: 48rem) {
+    .desktop-only {
+      display: none;
+    }
+    .mobile-only {
+      display: block;
+    }
+    .actions {
+      gap: var(--spacing-8);
+    }
+    .download-cv {
+      padding: var(--spacing-6) var(--spacing-12);
+      padding-right: var(--spacing-16);
+    }
   }
 </style>
