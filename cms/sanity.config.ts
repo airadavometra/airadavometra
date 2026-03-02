@@ -2,7 +2,7 @@ import {defineConfig} from 'sanity'
 import {structureTool} from 'sanity/structure'
 import {visionTool} from '@sanity/vision'
 import {schemaTypes} from './schemaTypes'
-import {HomeIcon} from '@sanity/icons'
+import {HomeIcon, CogIcon} from '@sanity/icons'
 
 export default defineConfig({
   name: 'default',
@@ -15,14 +15,22 @@ export default defineConfig({
     structureTool({
       structure: (S) =>
         S.list()
-          .title('Content')
+          .title('Website Content')
           .items([
             S.listItem()
               .title('Home Page')
               .icon(HomeIcon)
               .child(S.document().schemaType('homePage').documentId('homePage').title('Home Page')),
+            S.listItem()
+              .title('Site Settings')
+              .icon(CogIcon)
+              .child(
+                S.document().schemaType('settings').documentId('settings').title('Site Settings'),
+              ),
             S.divider(),
-            ...S.documentTypeListItems().filter((item) => item.getId() !== 'homePage'),
+            ...S.documentTypeListItems().filter(
+              (item) => !['homePage', 'settings'].includes(item.getId()!),
+            ),
           ]),
     }),
     visionTool(),
