@@ -53,16 +53,8 @@ export const homePage = defineType({
       type: 'string',
     }),
     defineField({
-      name: 'heroDesktop',
-      title: 'Hero Image (Desktop)',
-      type: 'image',
-      options: {
-        hotspot: true,
-      },
-    }),
-    defineField({
-      name: 'heroMobile',
-      title: 'Hero Image (Mobile)',
+      name: 'heroImage',
+      title: 'Hero Image',
       type: 'image',
       options: {
         hotspot: true,
