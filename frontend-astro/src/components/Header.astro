@@ -80,10 +80,11 @@ const { githubLink, linkedinLink, cvUrl } = data || {};
 
 <style>
   .header {
-    position: sticky;
+    position: fixed;
     top: 0;
+    left: 0;
+    right: 0;
     z-index: 100;
-    background-color: var(--white);
     font-size: var(--font-size-16-20);
     font-weight: 600;
   }
@@ -101,7 +102,7 @@ const { githubLink, linkedinLink, cvUrl } = data || {};
   }
 
   .nav-link {
-    transition: background-color 0.2s ease;
+    transition: any 0.2s ease;
   }
 
   .nav-link:hover {
@@ -117,7 +118,6 @@ const { githubLink, linkedinLink, cvUrl } = data || {};
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 8px;
     transition: all 0.2s ease;
     cursor: pointer;
   }
@@ -129,7 +129,6 @@ const { githubLink, linkedinLink, cvUrl } = data || {};
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 8px;
     transition: all 0.2s ease;
     cursor: pointer;
   }
@@ -151,7 +150,6 @@ const { githubLink, linkedinLink, cvUrl } = data || {};
   }
 
   .download-cv {
-    margin-left: var(--spacing-8);
     padding: var(--spacing-6) var(--spacing-16);
     padding-right: var(--spacing-24);
     display: flex;
@@ -168,9 +166,6 @@ const { githubLink, linkedinLink, cvUrl } = data || {};
     }
     .mobile-only {
       display: block;
-    }
-    .actions {
-      gap: var(--spacing-8);
     }
     .download-cv {
       padding: var(--spacing-6) var(--spacing-12);

@@ -3,16 +3,14 @@ import Layout from "../layouts/Layout.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import Section from "../components/Section.astro";
+import Hero from "../components/Hero.astro";
 ---
 
 <Layout>
-  <Header>
-    {/* Navigation placeholder */}
-  </Header>
+  <Header />
+
   <main class="main">
-    <Section id="hero">
-      <h1>Hero</h1>
-    </Section>
+    <Hero />
 
     <Section id="about">
       <h2>About</h2>
@@ -39,12 +37,12 @@ import Section from "../components/Section.astro";
   .main {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-64);
+    gap: var(--spacing-128);
   }
 
-  @media (min-width: 48rem) {
+  @media (max-width: 48rem) {
     .main {
-      gap: var(--spacing-128);
+      gap: var(--spacing-64);
     }
   }
 </style>
