@@ -1,0 +1,182 @@
+---
+import { client, urlFor } from "../lib/sanity";
+import WidthContainer from "./WidthContainer.astro";
+import ExternalLinkIcon from "./icons/ExternalLink.astro"; // I'll assume we need an icon for the arrow
+import Github from "./icons/Github.astro";
+
+const data = await client.fetch(`*[_type == "homePage"][0] { 
+  projects[] {
+    title,
+    year,
+    link,
+    description,
+    tags,
+    image
+  },
+  githubLink
+}`);
+
+const { projects = [], githubLink } = data || {};
+---
+
+<WidthContainer>
+  <section id="projects" class="projects-section">
+    <h2 class="title">Pet projects</h2>
+
+    <ul class="projects-list">
+      {
+        projects.map((project: any) => (
+          <li class="project-item">
+            <div class="project-image-container">
+              {project.image && (
+                <img
+                  src={urlFor(project.image).url()}
+                  alt={project.title}
+                  class="project-image"
+                />
+              )}
+            </div>
+
+            <div class="project-header">
+              {project.link && (
+                <a
+                  href={project.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="project-link"
+                  aria-label={`View ${project.title}`}
+                >
+                  {project.title}
+                  <ExternalLinkIcon class="icon" />
+                </a>
+              )}
+              <span class="project-year">{project.year}</span>
+            </div>
+
+            <p class="project-description">{project.description}</p>
+
+            {project.tags && project.tags.length > 0 && (
+              <ul class="project-tags">
+                {project.tags.map((tag: string) => (
+                  <li class="project-tag">{tag}</li>
+                ))}
+              </ul>
+            )}
+          </li>
+        ))
+      }
+    </ul>
+
+    {
+      githubLink && (
+        <div class="github-link-wrapper">
+          <a
+            href={githubLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="github-link"
+          >
+            Feel free to check out my GitHub
+            <Github class="github-icon" />
+          </a>
+        </div>
+      )
+    }
+  </section>
+</WidthContainer>
+
+<style>
+  .projects-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-48);
+  }
+
+  .title {
+    font-size: var(--font-size-32-40);
+    font-weight: 700;
+  }
+
+  .projects-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-64) var(--spacing-96);
+  }
+
+  .project-item {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-16);
+  }
+
+  .project-image-container {
+    /* Aspect ratio etc handled by user */
+  }
+
+  .project-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .project-link {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-12);
+    font-size: var(--font-size-20-24);
+    font-weight: 600;
+  }
+  .icon {
+    width: var(--font-size-24-32);
+    height: var(--font-size-24-32);
+  }
+  .project-year {
+    font-size: var(--font-size-20-24);
+    font-weight: 600;
+    color: var(--grey);
+  }
+
+  .project-tags {
+    display: flex;
+    gap: var(--spacing-24);
+  }
+  .project-tag {
+    padding: var(--spacing-4) var(--spacing-16);
+    border: 1px solid var(--black);
+  }
+
+  .github-link-wrapper {
+    margin-top: var(--spacing-128);
+    display: flex;
+    justify-content: center;
+  }
+  .github-link {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-16);
+    font-size: var(--font-size-20-32);
+    font-weight: 600;
+    text-align: center;
+  }
+  .github-icon {
+    width: var(--font-size-32-48);
+    height: var(--font-size-32-48);
+  }
+
+  @media (max-width: 48rem) {
+    .projects-list {
+      display: flex;
+      flex-direction: column;
+    }
+    .project-tags {
+      gap: var(--spacing-16);
+    }
+
+    .github-link-wrapper {
+      margin-top: var(--spacing-64);
+    }
+    .github-link {
+      flex-direction: column-reverse;
+      gap: var(--spacing-12);
+    }
+  }
+</style>

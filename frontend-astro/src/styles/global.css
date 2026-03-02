@@ -13,10 +13,11 @@ html {
   --font-size-16-20: clamp(1rem, 0.9271rem + 0.299vw, 1.25rem);
   --font-size-16-24: clamp(1rem, 0.8543rem + 0.5979vw, 1.5rem);
   --font-size-20-24: clamp(1.25rem, 1.1771rem + 0.299vw, 1.5rem);
-  --font-size-24-32: clamp(1.5rem, 1.1429rem + 1.7857vw, 2rem);
+  --font-size-20-32: clamp(1.25rem, 1.0314rem + 0.8969vw, 2rem);
+  --font-size-24-32: clamp(1.5rem, 1.3543rem + 0.5979vw, 2rem);
   --font-size-24-40: clamp(1.5rem, 1.2085rem + 1.1958vw, 2.5rem);
   --font-size-32-40: clamp(2rem, 1.8543rem + 0.5979vw, 2.5rem);
-  --font-size-32-48: clamp(2rem, 1.2857rem + 3.5714vw, 3rem);
+  --font-size-32-48: clamp(2rem, 1.7085rem + 1.1958vw, 3rem);
 
   --spacing-4: min(0.25rem, 4px);
   --spacing-6: min(0.375rem, 6px);
