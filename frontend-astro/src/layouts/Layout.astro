@@ -1,6 +1,18 @@
 ---
 import "../styles/reset.css";
 import "../styles/global.css";
+import { client, urlFor } from "../lib/sanity";
+
+const settings = await client.fetch(`*[_type == "settings"][0] { 
+  siteTitle, 
+  metaDescription, 
+  favicon, 
+  shareImage 
+}`);
+
+const { siteTitle, metaDescription, favicon, shareImage } = settings || {};
+const faviconUrl = favicon ? urlFor(favicon).url() : "";
+const shareImageUrl = shareImage ? urlFor(shareImage).width(1200).height(630).url() : "";
 ---
 
 <!doctype html>
@@ -8,10 +20,20 @@ import "../styles/global.css";
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
+		
+		<!-- SEO -->
+		<title>{siteTitle || "Daria Artemova"}</title>
+		<meta name="description" content={metaDescription} />
+		
+		<!-- Favicon -->
+		{faviconUrl && <link rel="icon" href={faviconUrl} />}
+		
+		<!-- Open Graph -->
+		<meta property="og:title" content={siteTitle} />
+		<meta property="og:description" content={metaDescription} />
+		{shareImageUrl && <meta property="og:image" content={shareImageUrl} />}
+		<meta property="og:type" content="website" />
 	</head>
 	<body>
 		<slot />
