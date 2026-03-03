@@ -1,6 +1,7 @@
 ---
 import WidthContainer from "./WidthContainer.astro";
 import MenuIcon from "./icons/Menu.astro";
+import CloseIcon from "./icons/Close.astro";
 import LinkedinIcon from "./icons/Linkedin.astro";
 import GithubIcon from "./icons/Github.astro";
 import DownloadCvButton from "./DownloadCvButton.astro";
@@ -35,10 +36,23 @@ const { githubLink, linkedinLink, cvUrl } = data || {};
       </nav>
 
       <div class="mobile-only">
-        <button class="menu-button" aria-label="Menu">
+        <button class="menu-button js-menu-open" aria-label="Open menu">
           <MenuIcon class="icon" />
         </button>
       </div>
+
+      <div class="mobile-menu js-mobile-menu">
+        <button class="close-button js-menu-close" aria-label="Close menu">
+          <CloseIcon class="icon" />
+        </button>
+        <nav class="mobile-navigation">
+          <a href="#experience" class="nav-link js-mobile-link">Experience</a>
+          <a href="#skills" class="nav-link js-mobile-link">Skills</a>
+          <a href="#projects" class="nav-link js-mobile-link">Pet Projects</a>
+          <a href="#contacts" class="nav-link js-mobile-link">Contact</a>
+        </nav>
+      </div>
+      <div class="mobile-menu-overlay js-menu-overlay"></div>
 
       <div class="actions">
         {
@@ -75,6 +89,64 @@ const { githubLink, linkedinLink, cvUrl } = data || {};
 
 <script>
   const header = document.querySelector(".js-header");
+  const menu = document.querySelector(".js-mobile-menu");
+  const overlay = document.querySelector(".js-menu-overlay");
+  const openBtn = document.querySelector(".js-menu-open");
+  const closeBtn = document.querySelector(".js-menu-close");
+  const mobileLinks = document.querySelectorAll(".js-mobile-link");
+
+  const toggleMenu = (open: boolean) => {
+    if (open) {
+      menu?.classList.add("mobile-menu--open");
+      overlay?.classList.add("mobile-menu-overlay--open");
+      document.body.style.overflow = "hidden";
+      (closeBtn as HTMLElement)?.focus();
+    } else {
+      menu?.classList.remove("mobile-menu--open");
+      overlay?.classList.remove("mobile-menu-overlay--open");
+      document.body.style.overflow = "";
+      (openBtn as HTMLElement)?.focus();
+    }
+  };
+
+  const handleFocusTrap = (e: KeyboardEvent) => {
+    if (!menu?.classList.contains("mobile-menu--open")) return;
+    if (e.key !== "Tab") return;
+
+    const focusables = menu.querySelectorAll<HTMLElement>(
+      "a[href], button:not([disabled])",
+    );
+    const first = focusables[0];
+    const last = focusables[focusables.length - 1];
+
+    if (e.shiftKey) {
+      if (document.activeElement === first) {
+        last.focus();
+        e.preventDefault();
+      }
+    } else {
+      if (document.activeElement === last) {
+        first.focus();
+        e.preventDefault();
+      }
+    }
+  };
+
+  const handleEsc = (e: KeyboardEvent) => {
+    if (e.key === "Escape" && menu?.classList.contains("mobile-menu--open")) {
+      toggleMenu(false);
+    }
+  };
+
+  openBtn?.addEventListener("click", () => toggleMenu(true));
+  closeBtn?.addEventListener("click", () => toggleMenu(false));
+  overlay?.addEventListener("click", () => toggleMenu(false));
+  window.addEventListener("keydown", handleFocusTrap);
+  window.addEventListener("keydown", handleEsc);
+
+  mobileLinks.forEach((link) => {
+    link.addEventListener("click", () => toggleMenu(false));
+  });
 
   const updateHeader = () => {
     if (!header) return;
@@ -125,9 +197,6 @@ const { githubLink, linkedinLink, cvUrl } = data || {};
     transition: any 0.2s ease;
   }
 
-  .nav-link:hover {
-  }
-
   .actions {
     display: flex;
     align-items: center;
@@ -142,9 +211,6 @@ const { githubLink, linkedinLink, cvUrl } = data || {};
     cursor: pointer;
   }
 
-  .icon-link:hover {
-  }
-
   .menu-button {
     display: flex;
     align-items: center;
@@ -153,7 +219,82 @@ const { githubLink, linkedinLink, cvUrl } = data || {};
     cursor: pointer;
   }
 
-  .menu-button:hover {
+  .mobile-menu {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: 80%;
+    max-width: 400px;
+    height: 100vh;
+    background-color: var(--white);
+    z-index: 200;
+    transition:
+      left 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+      visibility 0.4s linear;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    gap: var(--spacing-64);
+    padding: var(--spacing-16);
+    padding-left: var(--spacing-32);
+    visibility: hidden;
+  }
+
+  .mobile-menu--open {
+    left: 0;
+    visibility: visible;
+  }
+
+  .mobile-menu-header {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .close-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-self: flex-end;
+    transition: all 0.2s ease;
+    cursor: pointer;
+  }
+
+  .close-button:hover {
+    opacity: 0.7;
+  }
+
+  .mobile-navigation {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-32);
+  }
+
+  .mobile-nav-link {
+    font-size: var(--font-size-24-32);
+    font-weight: 700;
+    color: var(--black);
+    text-decoration: none;
+  }
+
+  .mobile-menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 150;
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity 0.4s ease,
+      visibility 0.4s ease;
+  }
+
+  .mobile-menu-overlay--open {
+    opacity: 1;
+    visibility: visible;
   }
 
   .icon {
