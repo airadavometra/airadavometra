@@ -2,6 +2,7 @@
 import "../styles/reset.css";
 import "../styles/global.css";
 import { client, urlFor } from "../lib/sanity";
+import FirebaseAnalytics from "../components/FirebaseAnalytics.astro";
 
 const settings = await client.fetch(`*[_type == "settings"][0] { 
   siteTitle, 
@@ -37,6 +38,7 @@ const shareImageUrl = shareImage ? urlFor(shareImage).width(1200).height(630).ur
 	</head>
 	<body>
 		<slot />
+		<FirebaseAnalytics />
 	</body>
 </html>
 

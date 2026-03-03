@@ -1,0 +1,26 @@
+---
+// This component initializes Firebase Analytics when loaded
+// Place it in your Layout component
+---
+
+<script>
+  import { initializeAnalytics } from "../lib/firebase-client";
+  import { trackPageView } from "../lib/analytics";
+
+  // Initialize analytics on page load
+  (async () => {
+    try {
+      await initializeAnalytics();
+      
+      // Track page view
+      trackPageView(window.location.pathname, document.title);
+    } catch (error) {
+      console.error("Failed to initialize Firebase Analytics:", error);
+    }
+  })();
+
+  // Track page view on navigation events (for client-side routing if applicable)
+  window.addEventListener("popstate", () => {
+    trackPageView(window.location.pathname, document.title);
+  });
+</script>

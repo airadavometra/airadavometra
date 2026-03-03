@@ -16,6 +16,7 @@ const { cvUrl } = Astro.props;
       rel="noopener noreferrer"
       class="download-cv"
       aria-label="Download CV"
+      id="cv-download-link"
     >
       <DownloadIcon class="icon" />
       <slot>Download CV</slot>
@@ -75,3 +76,14 @@ const { cvUrl } = Astro.props;
     }
   }
 </style>
+
+<script>
+  import { trackEvent } from "../lib/analytics";
+
+  const cvLink = document.getElementById("cv-download-link");
+  cvLink?.addEventListener("click", () => {
+    trackEvent("cv_download", {
+      file_name: "Daria Artemova CV.pdf",
+    });
+  });
+</script>
