@@ -39,6 +39,10 @@ const shareImageUrl = shareImage ? urlFor(shareImage).width(1200).height(630).ur
 	<body>
 		<slot />
 		<FirebaseAnalytics />
+		<script>
+			import { inject } from "@vercel/analytics";
+			inject();
+		</script>
 	</body>
 </html>
 
