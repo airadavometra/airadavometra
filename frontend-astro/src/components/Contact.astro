@@ -38,7 +38,10 @@ const currentYear = new Date().getFullYear();
       <div class="links-wrapper">
         {
           email && (
-            <button class="contact-link" aria-label="Copy email">
+            <button
+              class="contact-link hover-underline"
+              aria-label="Copy email"
+            >
               <span>{email}</span>
               <CopyIcon class="icon" />
             </button>
@@ -51,7 +54,7 @@ const currentYear = new Date().getFullYear();
               href={linkedinLink}
               target="_blank"
               rel="noopener noreferrer"
-              class="contact-link"
+              class="contact-link hover-underline"
             >
               <span>LinkedIn</span>
               <ExternalLinkIcon class="icon" />

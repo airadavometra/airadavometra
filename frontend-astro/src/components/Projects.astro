@@ -43,10 +43,10 @@ const { projects = [], githubLink } = data || {};
                   href={project.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  class="project-link"
-                  aria-label={`View ${project.title}`}
+                  class="project-link hover-underline"
+                  aria-label={`Open ${project.title}`}
                 >
-                  {project.title}
+                  <span>{project.title}</span>
                   <ExternalLinkIcon class="icon" />
                 </a>
               )}
@@ -74,9 +74,9 @@ const { projects = [], githubLink } = data || {};
             href={githubLink}
             target="_blank"
             rel="noopener noreferrer"
-            class="github-link"
+            class="github-link hover-underline"
           >
-            Feel free to check out my GitHub
+            <span>Feel free to check out my GitHub</span>
             <Github class="github-icon" />
           </a>
         </div>
