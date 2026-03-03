@@ -16,7 +16,7 @@ const data = await client.fetch(
 const { githubLink, linkedinLink, cvUrl } = data || {};
 ---
 
-<header class="header">
+<header class="header js-header">
   <WidthContainer>
     <div class="header-content">
       <nav class="navigation desktop-only">
@@ -73,6 +73,26 @@ const { githubLink, linkedinLink, cvUrl } = data || {};
   </WidthContainer>
 </header>
 
+<script>
+  const header = document.querySelector(".js-header");
+
+  const updateHeader = () => {
+    if (!header) return;
+    const scrollY = window.scrollY;
+    const threshold = window.innerHeight * 0.5; // 50vh
+
+    if (scrollY > threshold) {
+      header.classList.add("header--scrolled");
+    } else {
+      header.classList.remove("header--scrolled");
+    }
+  };
+
+  window.addEventListener("scroll", updateHeader);
+  // Initial check
+  updateHeader();
+</script>
+
 <style>
   .header {
     position: fixed;
@@ -82,6 +102,11 @@ const { githubLink, linkedinLink, cvUrl } = data || {};
     z-index: 100;
     font-size: var(--font-size-16-20);
     font-weight: 600;
+    transition: background-color 0.3s ease;
+  }
+
+  .header--scrolled {
+    background-color: var(--white);
   }
 
   .header-content {
