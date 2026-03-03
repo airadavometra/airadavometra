@@ -16,14 +16,15 @@ import Heart from "./icons/Heart.astro";
 
 <style>
   .footer {
-    padding: 12px 0;
+    padding: var(--spacing-12) 0;
+    margin-top: var(--spacing-96);
     font-size: var(--font-size-14-16);
     font-weight: 400;
   }
 
   @media (max-width: 48rem) {
     .footer {
-      padding: 18px 0;
+      margin-top: var(--spacing-32);
     }
   }
 
@@ -36,7 +37,7 @@ import Heart from "./icons/Heart.astro";
   .made-with {
     display: flex;
     align-items: center;
-    gap: 0.5ch;
+    gap: var(--spacing-8);
   }
 
   .heart-icon {
