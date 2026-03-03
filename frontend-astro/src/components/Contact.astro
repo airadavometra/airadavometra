@@ -39,10 +39,16 @@ const currentYear = new Date().getFullYear();
         {
           email && (
             <button
-              class="contact-link hover-underline"
+              class="contact-link hover-underline js-copy-email"
+              data-email={email}
               aria-label="Copy email"
             >
-              <span>{email}</span>
+              <span class="email-container">
+                <span class="email-text js-email-text">{email}</span>
+                <span class="copied-text js-copied-text">
+                  Email was copied!
+                </span>
+              </span>
               <CopyIcon class="icon" />
             </button>
           )
@@ -104,7 +110,51 @@ const currentYear = new Date().getFullYear();
     gap: var(--spacing-12);
     font-size: var(--font-size-20-24);
     font-weight: 600;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+    font-family: inherit;
+    color: inherit;
+    position: relative;
   }
+
+  .email-container {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .email-text {
+    transition:
+      opacity 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+      transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .copied-text {
+    position: absolute;
+    left: 0;
+    opacity: 0;
+    transform: translateY(10px);
+    transition:
+      opacity 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+      transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    color: var(--black);
+    font-weight: 400;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+
+  .is-copied .email-text {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  .is-copied .copied-text {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
   .icon {
     width: var(--font-size-24-32);
     height: var(--font-size-24-32);
@@ -131,3 +181,28 @@ const currentYear = new Date().getFullYear();
     }
   }
 </style>
+
+<script>
+  const copyButtons = document.querySelectorAll(".js-copy-email");
+
+  copyButtons.forEach((button) => {
+    button.addEventListener("click", async () => {
+      const email = button.getAttribute("data-email");
+      if (!email) return;
+
+      try {
+        await navigator.clipboard.writeText(email);
+
+        // Add visual feedback class
+        button.classList.add("is-copied");
+
+        // Remove feedback after 2.5 seconds
+        setTimeout(() => {
+          button.classList.remove("is-copied");
+        }, 2500);
+      } catch (err) {
+        console.error("Failed to copy email: ", err);
+      }
+    });
+  });
+</script>
