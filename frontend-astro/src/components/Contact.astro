@@ -1,0 +1,130 @@
+---
+import { client, urlFor } from "../lib/sanity";
+import WidthContainer from "./WidthContainer.astro";
+import ExternalLinkIcon from "./icons/ExternalLink.astro";
+import CopyIcon from "./icons/Copy.astro";
+
+const data = await client.fetch(`*[_type == "homePage"][0] { 
+  contactSectionTitle,
+  email,
+  linkedinLink,
+  contactSectionImage
+}`);
+
+const {
+  contactSectionTitle = "You can reach me here",
+  email,
+  linkedinLink,
+  contactSectionImage,
+} = data || {};
+
+const currentYear = new Date().getFullYear();
+---
+
+<WidthContainer>
+  <section id="contact" class="contact-section">
+    {
+      contactSectionImage && (
+        <img
+          src={urlFor(contactSectionImage).url()}
+          alt="Contact decorative"
+          class="contact-image"
+        />
+      )
+    }
+
+    <div class="info-wrapper">
+      <h2 class="title">{contactSectionTitle}</h2>
+      <div class="links-wrapper">
+        {
+          email && (
+            <button class="contact-link" aria-label="Copy email">
+              <span>{email}</span>
+              <CopyIcon class="icon" />
+            </button>
+          )
+        }
+
+        {
+          linkedinLink && (
+            <a
+              href={linkedinLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="contact-link"
+            >
+              <span>LinkedIn</span>
+              <ExternalLinkIcon class="icon" />
+            </a>
+          )
+        }
+      </div>
+    </div>
+  </section>
+</WidthContainer>
+
+<style>
+  .contact-section {
+    /* min-height: 400px; */
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .contact-image {
+    /* position: absolute;
+    bottom: 0;
+    z-index: -1; */
+  }
+
+  .info-wrapper {
+    margin-top: var(--spacing-128);
+    margin-left: auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-32);
+  }
+
+  .links-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-32);
+  }
+
+  .title {
+    font-size: var(--font-size-32-40);
+    font-weight: 700;
+  }
+
+  .contact-link {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-12);
+    font-size: var(--font-size-20-24);
+    font-weight: 600;
+  }
+  .icon {
+    width: var(--font-size-24-32);
+    height: var(--font-size-24-32);
+  }
+
+  @media (max-width: 48rem) {
+    .contact-section {
+      flex-direction: column-reverse;
+      gap: var(--spacing-32);
+    }
+
+    .contact-image {
+      max-width: 80%;
+      margin-left: auto;
+      transform: scaleX(-1);
+    }
+
+    .info-wrapper {
+      margin: 0;
+    }
+
+    .links-wrapper {
+      gap: var(--spacing-16);
+    }
+  }
+</style>
