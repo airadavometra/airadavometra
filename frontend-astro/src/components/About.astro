@@ -24,11 +24,7 @@ const {
   <section id="about" class="about-section">
     {
       aboutMeImage && (
-        <img
-          class="image"
-          src={urlFor(aboutMeImage).url()}
-          alt={aboutMeImage.alt || ""}
-        />
+        <img class="image" src={urlFor(aboutMeImage).url()} alt={""} />
       )
     }
 
@@ -102,9 +98,7 @@ const {
     }
 
     .image {
-      margin-left: auto;
-      width: 80%;
-      transform: scaleX(-1);
+      max-width: 100%;
     }
 
     .cta-button-wrapper {

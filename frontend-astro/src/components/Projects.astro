@@ -31,7 +31,7 @@ const { projects = [], githubLink } = data || {};
               {project.image && (
                 <img
                   src={urlFor(project.image).url()}
-                  alt={project.title}
+                  alt={`${project.title} screenshot`}
                   class="project-image"
                 />
               )}
