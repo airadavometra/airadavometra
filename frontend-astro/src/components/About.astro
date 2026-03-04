@@ -22,13 +22,15 @@ const {
 
 <WidthContainer>
   <section id="about" class="about-section">
-    <div class="image-wrapper">
-      {
-        aboutMeImage && (
-          <img src={urlFor(aboutMeImage).url()} alt={aboutMeImage.alt || ""} />
-        )
-      }
-    </div>
+    {
+      aboutMeImage && (
+        <img
+          class="image"
+          src={urlFor(aboutMeImage).url()}
+          alt={aboutMeImage.alt || ""}
+        />
+      )
+    }
 
     <div class="content-wrapper">
       <div class="title-wrapper">
@@ -58,7 +60,7 @@ const {
     gap: var(--spacing-128);
   }
 
-  .image-wrapper {
+  .image {
     width: 100%;
     max-width: 500px;
   }
@@ -99,7 +101,7 @@ const {
       gap: var(--spacing-32);
     }
 
-    .image-wrapper {
+    .image {
       margin-left: auto;
       width: 80%;
       transform: scaleX(-1);
