@@ -1,0 +1,97 @@
+---
+import { client, urlFor } from "../lib/sanity";
+import WidthContainer from "./WidthContainer.astro";
+
+interface Props {
+  field: "featuredManga1" | "featuredManga2" | "featuredManga3";
+}
+
+const { field } = Astro.props as Props;
+
+const data = await client.fetch(`*[_type == "homePage"][0] {
+  ${field}-> {
+    title,
+    images[] {
+      asset,
+      alt
+    }
+  }
+}`);
+
+const manga = data?.[field];
+
+// Don't render if no manga data or no images
+if (!manga?.title || !manga?.images?.length) {
+  return null;
+}
+---
+
+<div class="manga-wrapper">
+  <WidthContainer>
+    <section class="manga-section">
+      <h2 class="title sr-only">Manga panel: {manga.title}</h2>
+
+      <div class="images-container">
+        {
+          manga.images.map((image: any) => (
+            <img
+              src={urlFor(image).url()}
+              alt={image.alt || manga.title}
+              class="manga-panel"
+            />
+          ))
+        }
+      </div>
+    </section>
+  </WidthContainer>
+</div>
+
+<style>
+  .manga-wrapper {
+    margin-top: var(--spacing-64);
+    margin-bottom: var(--spacing-64);
+    background-color: var(--grey);
+    padding: var(--spacing-48) 0;
+  }
+
+  .manga-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-32);
+  }
+
+  .title {
+    font-size: var(--font-size-32-40);
+    font-weight: 700;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+
+  .images-container {
+    display: flex;
+    gap: var(--spacing-24);
+    overflow-x: auto;
+  }
+
+  .manga-panel {
+    width: 100%;
+    min-width: 200px;
+    overflow: hidden;
+  }
+
+  @media (max-width: 48rem) {
+    .images-container {
+      flex-direction: column;
+    }
+  }
+</style>
