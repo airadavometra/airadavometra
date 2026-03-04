@@ -62,11 +62,15 @@ const {
 
     {
       contactSectionImage && (
-        <img
-          src={urlFor(contactSectionImage).url()}
-          alt="Contact decorative"
-          class="contact-image"
-        />
+        <div class="contact-image-wrapper">
+          <WidthContainer>
+            <img
+              src={urlFor(contactSectionImage).url()}
+              alt=""
+              class="contact-image"
+            />
+          </WidthContainer>
+        </div>
       )
     }
   </section>
@@ -74,15 +78,22 @@ const {
 
 <style>
   .contact-section {
-    /* min-height: 400px; */
+    min-height: 400px;
     display: flex;
     justify-content: space-between;
   }
 
-  .contact-image {
-    /* position: absolute;
+  .contact-image-wrapper {
+    width: 100%;
+    position: absolute;
     bottom: 0;
-    z-index: -1; */
+    right: 0;
+    z-index: -1;
+  }
+
+  .contact-image {
+    max-width: 800px;
+    margin-left: auto;
   }
 
   .info-wrapper {
@@ -167,8 +178,8 @@ const {
     }
 
     .contact-image {
-      max-width: 80%;
-      margin-left: auto;
+      margin-right: calc(var(--spacing-16) * -1);
+      max-width: 100%;
     }
 
     .info-wrapper {
