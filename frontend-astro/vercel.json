@@ -1,7 +1,7 @@
 {
   "redirects": [
     {
-      "source": "/(.+)",
+      "source": "/(?!.*\\.(?:png|jpg|jpeg|gif|svg|css|js|json|xml|ico|webp)$)(.+)",
       "destination": "/",
       "permanent": true
     }
