@@ -29,11 +29,19 @@ const { projects = [], githubLink } = data || {};
           <li class="project-item">
             <div class="project-image-container">
               {project.image && (
-                <img
-                  src={urlFor(project.image).url()}
-                  alt={`${project.title} screenshot`}
-                  class="project-image"
-                />
+                <a
+                  href={project.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`Open ${project.title}`}
+                  data-project-name={project.title}
+                >
+                  <img
+                    src={urlFor(project.image).url()}
+                    alt={`${project.title} screenshot`}
+                    class="project-image"
+                  />
+                </a>
               )}
             </div>
 
@@ -102,7 +110,7 @@ const { projects = [], githubLink } = data || {};
   .projects-list {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: var(--spacing-64) var(--spacing-96);
+    gap: var(--spacing-64);
   }
 
   .project-item {
@@ -139,7 +147,8 @@ const { projects = [], githubLink } = data || {};
 
   .project-tags {
     display: flex;
-    gap: var(--spacing-24);
+    flex-wrap: wrap;
+    gap: var(--spacing-16) var(--spacing-24);
   }
   .project-tag {
     padding: var(--spacing-4) var(--spacing-16);
