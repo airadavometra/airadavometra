@@ -5,6 +5,7 @@ html {
   --black: #010b13;
   --white: #f7f7f7;
   --grey: #bebfc5;
+  --grey-transparent: #bebfc588;
 
   /* Minimum viewport width: 390px */
   /* Maximum viewport width: 1728px */
