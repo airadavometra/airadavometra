@@ -1,4 +1,4 @@
-# airadavometra
+# Development
 
 Daria Artemova's portfolio: a one-page site built with [Astro](https://astro.build), with content managed in [Sanity](https://www.sanity.io).
 
