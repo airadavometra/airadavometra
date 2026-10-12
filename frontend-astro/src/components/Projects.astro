@@ -17,22 +17,54 @@ const { projects } = Astro.props;
 
     <ul class="projects-list">
       {projects?.map((project) => {
-        const cover = project.screenshots?.[0];
+        const screenshots = project.screenshots ?? [];
 
         return (
           <li class="project-item">
-            {cover && (
-              <img
-                {...sanityImage(cover, {
-                  widths: [400, 700, 1000, 1400],
-                  sizes:
-                    "(max-width: 48rem) calc(100vw - 32px), min(688px, calc(50vw - 48px))",
-                })}
-                alt={cover.alt || `${project.title} screenshot`}
-                class="project-image"
-                loading="lazy"
-                decoding="async"
-              />
+            {screenshots.length > 0 && (
+              <div class="gallery js-gallery">
+                {/* One cover per screenshot; the script shows the selected one */}
+                {screenshots.map((screenshot, index) => (
+                  <img
+                    {...sanityImage(screenshot, {
+                      widths: [400, 700, 1000, 1400],
+                      sizes:
+                        "(max-width: 48rem) calc(100vw - 32px), min(688px, calc(50vw - 48px))",
+                    })}
+                    alt={screenshot.alt || `${project.title} screenshot`}
+                    class="project-image js-gallery-cover"
+                    hidden={index > 0}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                ))}
+
+                {screenshots.length > 1 && (
+                  <ul class="thumbnails">
+                    {screenshots.map((screenshot, index) => (
+                      <li>
+                        <button
+                          class="thumbnail js-gallery-thumb"
+                          aria-pressed={index === 0 ? "true" : "false"}
+                          aria-label={`Show screenshot ${index + 1} of ${screenshots.length}, ${project.title}`}
+                        >
+                          <img
+                            {...sanityImage(screenshot, {
+                              widths: [150, 300],
+                              sizes:
+                                "(max-width: 48rem) calc((100vw - 56px) / 5), min(131px, calc((50vw - 80px) / 5))",
+                            })}
+                            alt=""
+                            class="thumbnail-image"
+                            loading="lazy"
+                            decoding="async"
+                          />
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
             )}
 
             <div class="project-header">
@@ -97,6 +129,59 @@ const { projects } = Astro.props;
     gap: var(--spacing-16);
   }
 
+  .gallery {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-8);
+  }
+
+  /* Every cover has the same shape, whatever the uploaded screenshot's size */
+  .project-image {
+    width: 100%;
+    aspect-ratio: 1200 / 630;
+    object-fit: cover;
+    border: var(--border-width) solid var(--grey);
+  }
+  /* The reset makes images display: block, which would override [hidden] */
+  .project-image[hidden] {
+    display: none;
+  }
+
+  .thumbnails {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: var(--spacing-8);
+  }
+  .thumbnail {
+    display: block;
+    width: 100%;
+    border: var(--border-width) solid var(--grey);
+    opacity: 0.55;
+    transition: opacity var(--transition-fast);
+  }
+  .thumbnail-image {
+    width: 100%;
+    aspect-ratio: 1200 / 630;
+    object-fit: cover;
+  }
+  .thumbnail[aria-pressed="true"] {
+    border-color: var(--blue);
+    opacity: 1;
+  }
+  /* Flush with the border, so together they make one 2px frame. Keyboard
+     focus shows the browser's own ring instead. */
+  .thumbnail[aria-pressed="true"]:not(:focus-visible) {
+    outline: var(--border-width) solid var(--blue);
+  }
+  .thumbnail:focus-visible {
+    opacity: 1;
+  }
+  @media (hover: hover) {
+    .thumbnail:hover {
+      opacity: 1;
+    }
+  }
+
   .project-header {
     display: flex;
     justify-content: space-between;
@@ -140,5 +225,42 @@ const { projects } = Astro.props;
     .project-tags {
       gap: var(--spacing-16);
     }
+    .thumbnails {
+      gap: var(--spacing-6);
+    }
   }
 </style>
+
+<script>
+  // Clicking a thumbnail shows that screenshot as the cover. The new cover only
+  // replaces the old one once it has loaded, so the frame never flashes empty.
+  document.querySelectorAll(".js-gallery").forEach((gallery) => {
+    const covers =
+      gallery.querySelectorAll<HTMLImageElement>(".js-gallery-cover");
+    const thumbs = gallery.querySelectorAll(".js-gallery-thumb");
+    let wanted: HTMLImageElement | undefined;
+
+    thumbs.forEach((thumb, index) => {
+      thumb.addEventListener("click", () => {
+        thumbs.forEach((other) =>
+          other.setAttribute("aria-pressed", String(other === thumb)),
+        );
+
+        const next = covers[index];
+        wanted = next;
+        const show = () => {
+          if (wanted !== next) return; // A later click won
+          covers.forEach((cover) => (cover.hidden = cover !== next));
+        };
+
+        if (next.complete && next.naturalWidth > 0) {
+          show();
+        } else {
+          next.addEventListener("load", show, { once: true });
+          next.addEventListener("error", show, { once: true });
+          next.loading = "eager";
+        }
+      });
+    });
+  });
+</script>
