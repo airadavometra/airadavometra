@@ -5,16 +5,15 @@ import CloseIcon from "./icons/Close.astro";
 import LinkedinIcon from "./icons/Linkedin.astro";
 import GithubIcon from "./icons/Github.astro";
 import DownloadCvButton from "./DownloadCvButton.astro";
-import { client } from "../lib/sanity";
+import type { Home } from "../lib/queries";
 
-const data = await client.fetch(
-  `*[_type == "homePage"][0] { 
-    githubLink, 
-    linkedinLink, 
-    "cvUrl": cvFile.asset->url
-  }`,
-);
-const { githubLink, linkedinLink, cvUrl } = data || {};
+interface Props {
+  githubLink: Home["githubLink"] | undefined;
+  linkedinLink: Home["linkedinLink"] | undefined;
+  cvUrl: Home["cvUrl"] | undefined;
+}
+
+const { githubLink, linkedinLink, cvUrl } = Astro.props;
 ---
 
 <header class="header js-header">
@@ -70,6 +69,8 @@ const { githubLink, linkedinLink, cvUrl } = data || {};
             rel="noopener noreferrer"
             aria-label="GitHub"
             class="icon-link hover-scale"
+            data-track="github_click"
+            data-track-location="header"
           >
             <GithubIcon class="icon" />
           </a>
@@ -81,11 +82,13 @@ const { githubLink, linkedinLink, cvUrl } = data || {};
             rel="noopener noreferrer"
             aria-label="LinkedIn"
             class="icon-link hover-scale"
+            data-track="linkedin_click"
+            data-track-location="header"
           >
             <LinkedinIcon class="icon" />
           </a>
         )}
-        {cvUrl && <DownloadCvButton cvUrl={cvUrl} />}
+        <DownloadCvButton cvUrl={cvUrl} location="header" />
       </div>
     </div>
   </WidthContainer>
@@ -164,7 +167,7 @@ const { githubLink, linkedinLink, cvUrl } = data || {};
     }
   };
 
-  window.addEventListener("scroll", updateHeader);
+  window.addEventListener("scroll", updateHeader, { passive: true });
   // Initial check
   updateHeader();
 </script>
@@ -175,10 +178,10 @@ const { githubLink, linkedinLink, cvUrl } = data || {};
     top: 0;
     left: 0;
     right: 0;
-    z-index: 100;
+    z-index: var(--z-header);
     font-size: var(--font-size-16-20);
     font-weight: 600;
-    transition: background-color 0.3s ease;
+    transition: background-color var(--transition-normal);
   }
 
   .header--scrolled {
@@ -197,10 +200,6 @@ const { githubLink, linkedinLink, cvUrl } = data || {};
     gap: var(--spacing-32);
   }
 
-  .nav-link {
-    transition: any 0.2s ease;
-  }
-
   .actions {
     display: flex;
     align-items: center;
@@ -211,7 +210,6 @@ const { githubLink, linkedinLink, cvUrl } = data || {};
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.2s ease;
     cursor: pointer;
   }
 
@@ -219,7 +217,6 @@ const { githubLink, linkedinLink, cvUrl } = data || {};
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.2s ease;
     cursor: pointer;
   }
 
@@ -231,10 +228,10 @@ const { githubLink, linkedinLink, cvUrl } = data || {};
     width: 80%;
     max-width: 400px;
     background-color: var(--white);
-    z-index: 200;
+    z-index: var(--z-menu);
     transition:
-      left 0.4s cubic-bezier(0.16, 1, 0.3, 1),
-      visibility 0.4s linear;
+      left var(--transition-menu),
+      visibility var(--transition-menu);
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -250,17 +247,12 @@ const { githubLink, linkedinLink, cvUrl } = data || {};
     visibility: visible;
   }
 
-  .mobile-menu-header {
-    display: flex;
-    justify-content: flex-end;
-  }
-
   .close-button {
     display: flex;
     align-items: center;
     justify-content: center;
     align-self: flex-end;
-    transition: all 0.2s ease;
+    transition: opacity var(--transition-fast);
     cursor: pointer;
   }
 
@@ -287,13 +279,13 @@ const { githubLink, linkedinLink, cvUrl } = data || {};
     left: 0;
     bottom: 0;
     width: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 150;
+    background-color: var(--backdrop);
+    z-index: var(--z-menu-overlay);
     opacity: 0;
     visibility: hidden;
     transition:
-      opacity 0.4s ease,
-      visibility 0.4s ease;
+      opacity var(--transition-menu),
+      visibility var(--transition-menu);
   }
 
   .mobile-menu-overlay--open {
@@ -306,21 +298,7 @@ const { githubLink, linkedinLink, cvUrl } = data || {};
     height: var(--font-size-24-32);
   }
 
-  .desktop-only {
-    display: flex;
-  }
-
-  .mobile-only {
-    display: none;
-  }
-
   @media (max-width: 48rem) {
-    .desktop-only {
-      display: none;
-    }
-    .mobile-only {
-      display: block;
-    }
     .actions {
       gap: var(--spacing-16);
     }

@@ -1,0 +1,7 @@
+{
+  "path": "../frontend-astro/src/lib/**/*.ts",
+  "schema": "schema.json",
+  "generates": "../frontend-astro/src/sanity/types.ts",
+  "overloadClientMethods": true,
+  "formatGeneratedCode": false
+}

@@ -15,12 +15,13 @@ The Studio (`cms/`) and the site (`frontend-astro/`) share one dataset: project 
    - Images that carry meaning get an `alt` field (`validation: (Rule) => Rule.required()`).
    - File fields get `options.accept`, such as `'image/svg+xml'` or `'application/pdf'`.
 2. **Validate.** In `cms/`, run `npx sanity schema validate` and then `npm run build`.
-3. **Query.** Add the field to the GROQ projection that feeds the component, then render it.
+3. **Query.** Add the field to `pageQuery` in `frontend-astro/src/lib/queries.ts`. This is the only query on the page.
    - Project images as whole objects (`image`, not `image{asset}`), so crop, hotspot and `alt` survive.
-   - Guard optional fields, because the dataset can lag behind the schema.
-4. **Deploy the Studio** with `npm run deploy` in `cms/`, so the editor can fill the new field. This publishes to Sanity hosting, so **ask the user first**.
-5. **Content.** The user fills the field in the Studio. Never write production content yourself unless the user asks.
-6. **Verify.** Run `npm run build` in `frontend-astro/`, then follow the `verify-ui` skill.
+4. **Types.** Run `npm run typegen` in `cms/`. It extracts the schema and regenerates `frontend-astro/src/sanity/types.ts`; commit that file.
+5. **Render.** Pass the field from `index.astro` to the component as a prop typed from `Home` (for example `Home["email"]`). Guard against `null`, because the dataset can lag behind the schema.
+6. **Deploy the Studio** with `npm run deploy` in `cms/`, so the editor can fill the new field. This publishes to Sanity hosting, so **ask the user first**.
+7. **Content.** The user fills the field in the Studio. Never write production content yourself unless the user asks.
+8. **Verify.** Run `npm run build` in `frontend-astro/`, then follow the `verify-ui` skill.
 
 ## Remove or rename a field
 

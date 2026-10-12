@@ -17,11 +17,16 @@ Frontend (run in `frontend-astro/`):
 - `npm run format` / `npm run format:check`: Prettier with `prettier-plugin-astro`
 - `npm run screenshot -- --out <dir>`, `npm run a11y`, `node scripts/diff.mjs <a> <b>`: see the `verify-ui` skill
 
-CMS (run in `cms/`): `npm run dev` (Studio on :3333), `npm run deploy` (publish the Studio).
+CMS (run in `cms/`): `npm run dev` (Studio on :3333), `npm run typegen` (regenerate query and schema types), `npm run deploy` (publish the Studio).
 
 ## How content gets to the page
 
-Components fetch from Sanity at build time through `src/lib/sanity.ts` (`client`, `urlFor`). The output is static, so publishing in the Studio only shows up after a rebuild (Sanity webhook → Vercel deploy hook). Never hardcode copy that belongs in the CMS. To change a field end to end, follow the `sanity-content` skill.
+`src/pages/index.astro` runs the one GROQ query, `pageQuery` in `src/lib/queries.ts`, at build time and passes typed props down. Components never fetch.
+
+- The result types (`Settings`, `Home`, `Manga`) come from `src/sanity/types.ts`, which Sanity TypeGen generates.
+- After changing the query or a schema, run `npm run typegen` in `cms/` and commit the regenerated file. Vercel builds only the frontend, so it can't generate it.
+
+The output is static, so publishing in the Studio only shows up after a rebuild (Sanity webhook → Vercel deploy hook). Never hardcode copy that belongs in the CMS. To change a field end to end, follow the `sanity-content` skill.
 
 `homePage.featuredManga1`–`3` are manga strips placed between sections (after About, after Experience & skills, after Pet projects). A slot can be empty, and then that strip doesn't render.
 
@@ -29,7 +34,8 @@ Components fetch from Sanity at build time through `src/lib/sanity.ts` (`client`
 
 - Astro components with a scoped `<style>` block; site-wide tokens, resets and utilities live in `src/styles/global.css`. Follow the `css` skill for any styling work.
 - Interactivity is a plain `<script>` in the component. No React or other UI-framework islands.
-- Icons are `.astro` SVG components in `src/components/icons/`, using `fill="currentColor"`.
+- Icons are `.astro` SVG components in `src/components/icons/`, using `fill="currentColor"` and `aria-hidden="true"`. Skill icons uploaded to the CMS are inlined at build time through `inlineSvg` (`src/lib/svg.ts`), which strips anything executable.
+- Analytics is Vercel Web Analytics. To track a click, add `data-track="event_name"` and optional `data-track-<prop>="value"` to the element; a single listener in `src/lib/analytics.ts` sends it. Never send visitor data.
 - The design is light-only on purpose: two full-page texture overlays (`body::before`/`::after`) multiply over everything.
 
 ## Definition of done

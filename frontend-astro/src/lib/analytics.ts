@@ -1,80 +1,27 @@
-import { logEvent } from "firebase/analytics";
-import { getFirebaseAnalytics } from "./firebase-client";
+import { track } from "@vercel/analytics";
 
 /**
- * Log a custom analytics event
- * @param eventName - Name of the event
- * @param eventParams - Additional event parameters
+ * One delegated click listener for the whole page. Mark an element with
+ * `data-track="event_name"` and optional `data-track-<prop>="value"`, e.g.
+ * `<a data-track="cv_download" data-track-location="header">`.
+ *
+ * Custom events are only recorded on Vercel's Pro plan; on Hobby `track()` is a no-op.
  */
-export const trackEvent = (
-  eventName: string,
-  eventParams?: Record<string, any>,
-) => {
-  const analytics = getFirebaseAnalytics();
-  if (analytics) {
-    logEvent(analytics, eventName, eventParams);
-  }
-};
+export const initClickTracking = () => {
+  document.addEventListener("click", (event) => {
+    const element = (event.target as Element | null)?.closest<HTMLElement>(
+      "[data-track]",
+    );
+    const name = element?.dataset.track;
+    if (!element || !name) return;
 
-/**
- * Track page view (automatically tracked by Firebase, but can be used for custom tracking)
- * @param pagePath - The page path
- * @param pageTitle - The page title
- */
-export const trackPageView = (pagePath: string, pageTitle?: string) => {
-  trackEvent("page_view", {
-    page_path: pagePath,
-    page_title: pageTitle || document.title,
-  });
-};
-
-/**
- * Track user engagement
- */
-export const trackEngagement = () => {
-  trackEvent("engagement");
-};
-
-/**
- * Track button click
- * @param buttonName - Name/identifier of the button
- * @param buttonLabel - Display label of the button
- */
-export const trackButtonClick = (buttonName: string, buttonLabel?: string) => {
-  trackEvent("button_click", {
-    button_name: buttonName,
-    button_label: buttonLabel,
-  });
-};
-
-/**
- * Track form submission
- * @param formName - Name of the form
- */
-export const trackFormSubmission = (formName: string) => {
-  trackEvent("form_submit", {
-    form_name: formName,
-  });
-};
-
-/**
- * Track search
- * @param searchTerm - The search term
- */
-export const trackSearch = (searchTerm: string) => {
-  trackEvent("search", {
-    search_term: searchTerm,
-  });
-};
-
-/**
- * Track error
- * @param errorName - Name of the error
- * @param errorMessage - Error message
- */
-export const trackError = (errorName: string, errorMessage?: string) => {
-  trackEvent("error", {
-    error_name: errorName,
-    error_message: errorMessage,
+    const props: Record<string, string> = {};
+    for (const [key, value] of Object.entries(element.dataset)) {
+      // data-track-project-name -> dataset.trackProjectName -> projectName
+      if (key.startsWith("track") && key !== "track" && value !== undefined) {
+        props[key.charAt(5).toLowerCase() + key.slice(6)] = value;
+      }
+    }
+    track(name, props);
   });
 };

@@ -1,20 +1,20 @@
 ---
 import "../styles/reset.css";
 import "../styles/global.css";
-import { client, urlFor } from "../lib/sanity";
-import FirebaseAnalytics from "../components/FirebaseAnalytics.astro";
+import Analytics from "@vercel/analytics/astro";
+import { urlFor } from "../lib/sanity";
+import type { Settings } from "../lib/queries";
 
-const settings = await client.fetch(`*[_type == "settings"][0] { 
-  siteTitle, 
-  metaDescription, 
-  favicon, 
-  shareImage 
-}`);
+interface Props {
+  settings: Settings | null;
+}
 
-const { siteTitle, metaDescription, favicon, shareImage } = settings || {};
-const faviconUrl = favicon ? urlFor(favicon).url() : "";
-const shareImageUrl = shareImage
-  ? urlFor(shareImage).width(1200).height(630).url()
+const { settings } = Astro.props;
+const siteTitle = settings?.siteTitle;
+const metaDescription = settings?.metaDescription;
+const faviconUrl = settings?.favicon ? urlFor(settings.favicon).url() : "";
+const shareImageUrl = settings?.shareImage
+  ? urlFor(settings.shareImage).width(1200).height(630).url()
   : "";
 ---
 
@@ -40,12 +40,10 @@ const shareImageUrl = shareImage
   </head>
   <body>
     <slot />
-    <FirebaseAnalytics />
+    <Analytics />
     <script>
-      import { inject } from "@vercel/analytics";
-      inject();
+      import { initClickTracking } from "../lib/analytics";
+      initClickTracking();
     </script>
   </body>
 </html>
-
-<style></style>

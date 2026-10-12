@@ -1,22 +1,16 @@
 ---
-import { client, urlFor } from "../lib/sanity";
+import { urlFor } from "../lib/sanity";
+import type { Home } from "../lib/queries";
 import WidthContainer from "./WidthContainer.astro";
-import ExternalLinkIcon from "./icons/ExternalLink.astro"; // I'll assume we need an icon for the arrow
+import ExternalLinkIcon from "./icons/ExternalLink.astro";
 import Github from "./icons/Github.astro";
 
-const data = await client.fetch(`*[_type == "homePage"][0] { 
-  projects[] {
-    title,
-    year,
-    link,
-    description,
-    tags,
-    image
-  },
-  githubLink
-}`);
+interface Props {
+  projects: Home["projects"] | undefined;
+  githubLink: Home["githubLink"] | undefined;
+}
 
-const { projects = [], githubLink } = data || {};
+const { projects, githubLink } = Astro.props;
 ---
 
 <WidthContainer>
@@ -24,7 +18,7 @@ const { projects = [], githubLink } = data || {};
     <h2 class="title">Pet projects</h2>
 
     <ul class="projects-list">
-      {projects.map((project: any) => (
+      {projects?.map((project) => (
         <li class="project-item">
           <div class="project-image-container">
             {project.image && (
@@ -33,7 +27,8 @@ const { projects = [], githubLink } = data || {};
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={`Open ${project.title}`}
-                data-project-name={project.title}
+                data-track="project_click"
+                data-track-project={project.title}
               >
                 <img
                   src={urlFor(project.image).url()}
@@ -50,9 +45,10 @@ const { projects = [], githubLink } = data || {};
                 href={project.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                class="project-link hover-underline project-click"
+                class="project-link hover-underline"
                 aria-label={`Open ${project.title}`}
-                data-project-name={project.title}
+                data-track="project_click"
+                data-track-project={project.title}
               >
                 <span>{project.title}</span>
                 <ExternalLinkIcon class="icon" />
@@ -65,7 +61,7 @@ const { projects = [], githubLink } = data || {};
 
           {project.tags && project.tags.length > 0 && (
             <ul class="project-tags">
-              {project.tags.map((tag: string) => (
+              {project.tags.map((tag) => (
                 <li class="project-tag">{tag}</li>
               ))}
             </ul>
@@ -81,7 +77,8 @@ const { projects = [], githubLink } = data || {};
           target="_blank"
           rel="noopener noreferrer"
           class="github-link hover-underline"
-          id="github-link"
+          data-track="github_click"
+          data-track-location="projects"
         >
           <span>Check out my GitHub</span>
           <Github class="github-icon" />
@@ -115,10 +112,6 @@ const { projects = [], githubLink } = data || {};
     gap: var(--spacing-16);
   }
 
-  .project-image-container {
-    /* Aspect ratio etc handled by user */
-  }
-
   .project-header {
     display: flex;
     justify-content: space-between;
@@ -149,7 +142,7 @@ const { projects = [], githubLink } = data || {};
   }
   .project-tag {
     padding: var(--spacing-4) var(--spacing-16);
-    border: 1px solid var(--black);
+    border: var(--border-width) solid var(--black);
   }
 
   .github-link-wrapper {
@@ -188,49 +181,3 @@ const { projects = [], githubLink } = data || {};
     }
   }
 </style>
-
-<script>
-  import { trackEvent } from "../lib/analytics";
-
-  // Track project link clicks
-  document.querySelectorAll(".project-click").forEach((link) => {
-    link.addEventListener("click", () => {
-      const projectName = link.getAttribute("data-project-name");
-      trackEvent("project_click", {
-        project_name: projectName,
-        project_url: link.getAttribute("href"),
-      });
-    });
-  });
-
-  // Track GitHub link click
-  const githubLink = document.getElementById("github-link");
-  githubLink?.addEventListener("click", () => {
-    trackEvent("github_click", {
-      url: githubLink.getAttribute("href"),
-    });
-  });
-</script>
-
-<script>
-  import { trackEvent } from "../lib/analytics";
-
-  // Track project link clicks
-  document.querySelectorAll(".project-click").forEach((link) => {
-    link.addEventListener("click", () => {
-      const projectName = link.getAttribute("data-project-name");
-      trackEvent("project_click", {
-        project_name: projectName,
-        project_url: link.getAttribute("href"),
-      });
-    });
-  });
-
-  // Track GitHub link click
-  const githubLink = document.getElementById("github-link");
-  githubLink?.addEventListener("click", () => {
-    trackEvent("github_click", {
-      url: githubLink.getAttribute("href"),
-    });
-  });
-</script>

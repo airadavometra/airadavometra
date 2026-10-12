@@ -1,27 +1,16 @@
 ---
-import { client, urlFor } from "../lib/sanity";
+import { urlFor } from "../lib/sanity";
+import type { Manga } from "../lib/queries";
 import WidthContainer from "./WidthContainer.astro";
 
 interface Props {
-  field: "featuredManga1" | "featuredManga2" | "featuredManga3";
+  manga: Manga | null | undefined;
 }
 
-const { field } = Astro.props as Props;
+const { manga } = Astro.props;
 
-const data = await client.fetch(`*[_type == "homePage"][0] {
-  ${field}-> {
-    title,
-    images[] {
-      asset,
-      alt
-    }
-  }
-}`);
-
-const manga = data?.[field];
-
-// Don't render if no manga data or no images
-if (!manga?.title || !manga?.images?.length) {
+// An empty slot in the CMS renders nothing
+if (!manga?.title || !manga.images?.length) {
   return null;
 }
 ---
@@ -29,10 +18,10 @@ if (!manga?.title || !manga?.images?.length) {
 <div class="manga-wrapper">
   <WidthContainer>
     <section class="manga-section">
-      <h2 class="title sr-only">Manga panel: {manga.title}</h2>
+      <h2 class="title visually-hidden">Manga panel: {manga.title}</h2>
 
       <div class="images-container">
-        {manga.images.map((image: any) => (
+        {manga.images.map((image) => (
           <img
             src={urlFor(image).url()}
             alt={image.alt || manga.title}
@@ -63,18 +52,6 @@ if (!manga?.title || !manga?.images?.length) {
   .title {
     font-size: var(--font-size-32-40);
     font-weight: 700;
-  }
-
-  .sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border-width: 0;
   }
 
   .images-container {

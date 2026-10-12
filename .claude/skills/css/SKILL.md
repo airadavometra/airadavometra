@@ -31,6 +31,7 @@ description: CSS style and architecture rules for this site. Use when writing or
 
   --blue-text: #2563a8; /* Blue text on --white (5.7:1) */
   --grey-text: #6b6d75; /* Secondary text on --white (4.8:1) */
+  --backdrop: rgba(0, 0, 0, 0.5); /* Behind the mobile menu */
 }
 ```
 
@@ -60,6 +61,8 @@ The site is light-only. The ink and grain overlays use `mix-blend-mode: multiply
 --transition-fast: 0.2s ease;
 --transition-normal: 0.3s ease-in-out;
 --transition-slow: 0.5s ease-in-out;
+--transition-bounce: 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); /* playful swaps, e.g. "copied" */
+--transition-menu: 0.4s cubic-bezier(0.16, 1, 0.3, 1); /* mobile menu slide and backdrop */
 
 --z-header: 100;
 --z-menu-overlay: 150;
@@ -67,6 +70,8 @@ The site is light-only. The ink and grain overlays use `mix-blend-mode: multiply
 --z-ink-overlay: 9998;
 --z-grain-overlay: 9999;
 ```
+
+Use them as `transition: opacity var(--transition-fast)`. Inside a component, `z-index: -1` or `1` for layering against a sibling is fine without a token.
 
 No border radius: the manga look uses sharp 1px ink borders.
 
@@ -79,7 +84,7 @@ No border radius: the manga look uses sharp 1px ink borders.
 Project-specific only:
 
 - `.visually-hidden`: screen-reader-only text.
-- `.desktop-only` / `.mobile-only`: switch at the single breakpoint.
+- `.desktop-only` / `.mobile-only`: hide the element on the other side of the breakpoint. They only ever set `display: none !important`, so the component keeps its own `display` (flex, grid) where the element is shown.
 - `.hover-underline`: 3px `--blue` underline that grows on hover and focus. Wrap the text in a `<span>`.
 - `.hover-scale`: `scale(1.1)` on hover and focus.
 

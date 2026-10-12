@@ -1,35 +1,31 @@
 ---
-import { client, urlFor } from "../lib/sanity";
+import { urlFor } from "../lib/sanity";
+import type { Home } from "../lib/queries";
 import WidthContainer from "./WidthContainer.astro";
 import ExternalLinkIcon from "./icons/ExternalLink.astro";
 import CopyIcon from "./icons/Copy.astro";
 
-const data = await client.fetch(`*[_type == "homePage"][0] { 
-  contactSectionTitle,
-  email,
-  linkedinLink,
-  contactSectionImage
-}`);
+interface Props {
+  title: Home["contactSectionTitle"] | undefined;
+  email: Home["email"] | undefined;
+  linkedinLink: Home["linkedinLink"] | undefined;
+  image: Home["contactSectionImage"] | undefined;
+}
 
-const {
-  contactSectionTitle = "You can reach me here",
-  email,
-  linkedinLink,
-  contactSectionImage,
-} = data || {};
+const { title, email, linkedinLink, image } = Astro.props;
 ---
 
 <WidthContainer>
   <section id="contact" class="contact-section">
     <div class="info-wrapper">
-      <h2 class="title">{contactSectionTitle}</h2>
+      <h2 class="title">{title ?? "You can reach me here"}</h2>
       <div class="links-wrapper">
         {email && (
           <button
             class="contact-link hover-underline js-copy-email"
             data-email={email}
             aria-label="Copy email"
-            id="email-copy-btn"
+            data-track="email_copy"
           >
             <span class="email-container">
               <span class="email-text js-email-text">{email}</span>
@@ -45,7 +41,8 @@ const {
             target="_blank"
             rel="noopener noreferrer"
             class="contact-link hover-underline"
-            id="linkedin-link"
+            data-track="linkedin_click"
+            data-track-location="contact"
           >
             <span>LinkedIn</span>
             <ExternalLinkIcon class="icon" />
@@ -54,14 +51,10 @@ const {
       </div>
     </div>
 
-    {contactSectionImage && (
+    {image && (
       <div class="contact-image-wrapper">
         <WidthContainer>
-          <img
-            src={urlFor(contactSectionImage).url()}
-            alt=""
-            class="contact-image"
-          />
+          <img src={urlFor(image).url()} alt="" class="contact-image" />
         </WidthContainer>
       </div>
     )}
@@ -130,8 +123,8 @@ const {
 
   .email-text {
     transition:
-      opacity 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
-      transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      opacity var(--transition-bounce),
+      transform var(--transition-bounce);
   }
 
   .copied-text {
@@ -140,8 +133,8 @@ const {
     opacity: 0;
     transform: translateY(10px);
     transition:
-      opacity 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
-      transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      opacity var(--transition-bounce),
+      transform var(--transition-bounce);
     color: var(--black);
     font-weight: 400;
     pointer-events: none;
@@ -186,41 +179,24 @@ const {
 </style>
 
 <script>
-  import { trackEvent } from "../lib/analytics";
-
-  const copyButtons = document.querySelectorAll(".js-copy-email");
+  const copyButtons = document.querySelectorAll<HTMLElement>(".js-copy-email");
 
   copyButtons.forEach((button) => {
     button.addEventListener("click", async () => {
-      const email = button.getAttribute("data-email");
+      const email = button.dataset.email;
       if (!email) return;
 
       try {
         await navigator.clipboard.writeText(email);
 
-        // Track email copy
-        trackEvent("email_copy", {
-          email: email,
-        });
-
-        // Add visual feedback class
+        // Swap the address for the "copied" message, then swap back
         button.classList.add("is-copied");
-
-        // Remove feedback after 2.5 seconds
         setTimeout(() => {
           button.classList.remove("is-copied");
         }, 2500);
       } catch (err) {
         console.error("Failed to copy email: ", err);
       }
-    });
-  });
-
-  // Track LinkedIn link click
-  const linkedinLink = document.getElementById("linkedin-link");
-  linkedinLink?.addEventListener("click", () => {
-    trackEvent("linkedin_click", {
-      url: linkedinLink.getAttribute("href"),
     });
   });
 </script>

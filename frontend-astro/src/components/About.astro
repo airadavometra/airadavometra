@@ -1,44 +1,36 @@
 ---
-import { client, urlFor } from "../lib/sanity";
+import { urlFor } from "../lib/sanity";
+import type { Home } from "../lib/queries";
 import WidthContainer from "./WidthContainer.astro";
 import DownloadCvButton from "./DownloadCvButton.astro";
 
-const data = await client.fetch(`*[_type == "homePage"][0] { 
-  aboutMeImage,
-  aboutMeTitle,
-  aboutMeSubtitle,
-  aboutMeDescription,
-  "cvUrl": cvFile.asset->url,
-}`);
+interface Props {
+  image: Home["aboutMeImage"] | undefined;
+  title: Home["aboutMeTitle"] | undefined;
+  subtitle: Home["aboutMeSubtitle"] | undefined;
+  description: Home["aboutMeDescription"] | undefined;
+  cvUrl: Home["cvUrl"] | undefined;
+}
 
-const {
-  aboutMeImage,
-  aboutMeTitle,
-  aboutMeSubtitle,
-  aboutMeDescription,
-  cvUrl,
-} = data || {};
+const { image, title, subtitle, description, cvUrl } = Astro.props;
 ---
 
 <WidthContainer>
   <section id="about" class="about-section">
-    {aboutMeImage && (
-      <img class="image" src={urlFor(aboutMeImage).url()} alt={""} />
-    )}
+    {image && <img class="image" src={urlFor(image).url()} alt="" />}
 
     <div class="content-wrapper">
       <div class="title-wrapper">
-        {aboutMeTitle && <h2 class="title">{aboutMeTitle}</h2>}
-        {aboutMeSubtitle && <p class="subtitle">{aboutMeSubtitle}</p>}
+        {title && <h2 class="title">{title}</h2>}
+        {subtitle && <p class="subtitle">{subtitle}</p>}
       </div>
-      {aboutMeDescription
+      {description
         ?.split("\n")
         .map(
-          (paragraph: string) =>
-            paragraph && <p class="description">{paragraph}</p>,
+          (paragraph) => paragraph && <p class="description">{paragraph}</p>,
         )}
       <div class="cta-button-wrapper">
-        <DownloadCvButton cvUrl={cvUrl} />
+        <DownloadCvButton cvUrl={cvUrl} location="about" />
       </div>
     </div>
   </section>

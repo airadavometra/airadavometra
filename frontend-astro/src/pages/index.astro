@@ -2,34 +2,56 @@
 import Layout from "../layouts/Layout.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
-import Section from "../components/Section.astro";
 import Hero from "../components/Hero.astro";
 import About from "../components/About.astro";
 import ExperienceSkills from "../components/ExperienceSkills.astro";
 import Projects from "../components/Projects.astro";
 import MangaDisplay from "../components/MangaDisplay.astro";
 import Contact from "../components/Contact.astro";
+import { client } from "../lib/sanity";
+import { pageQuery } from "../lib/queries";
+
+const { settings, home } = await client.fetch(pageQuery);
 ---
 
-<Layout>
-  <Header />
+<Layout settings={settings}>
+  <Header
+    githubLink={home?.githubLink}
+    linkedinLink={home?.linkedinLink}
+    cvUrl={home?.cvUrl}
+  />
 
   <main class="main">
-    <Hero />
+    <Hero title={home?.title} image={home?.heroImage} />
 
-    <About />
+    <About
+      image={home?.aboutMeImage}
+      title={home?.aboutMeTitle}
+      subtitle={home?.aboutMeSubtitle}
+      description={home?.aboutMeDescription}
+      cvUrl={home?.cvUrl}
+    />
 
-    <MangaDisplay field="featuredManga1" />
+    <MangaDisplay manga={home?.featuredManga1} />
 
-    <ExperienceSkills />
+    <ExperienceSkills
+      experience={home?.experience}
+      experienceYears={home?.experienceYears}
+      skills={home?.skills}
+    />
 
-    <MangaDisplay field="featuredManga2" />
+    <MangaDisplay manga={home?.featuredManga2} />
 
-    <Projects />
+    <Projects projects={home?.projects} githubLink={home?.githubLink} />
 
-    <MangaDisplay field="featuredManga3" />
+    <MangaDisplay manga={home?.featuredManga3} />
 
-    <Contact />
+    <Contact
+      title={home?.contactSectionTitle}
+      email={home?.email}
+      linkedinLink={home?.linkedinLink}
+      image={home?.contactSectionImage}
+    />
   </main>
   <Footer />
 </Layout>

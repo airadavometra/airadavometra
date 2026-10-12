@@ -2,20 +2,20 @@
 import DownloadIcon from "./icons/Download.astro";
 
 interface Props {
-  cvUrl?: string;
+  cvUrl: string | null | undefined;
+  /** Where the button sits, sent with the cv_download analytics event */
+  location: "header" | "about";
 }
 
-const { cvUrl } = Astro.props;
+const { cvUrl, location } = Astro.props;
 ---
 
 {cvUrl && (
   <a
-    href={`${cvUrl}?filename="Daria Artemova CV.pdf"`}
-    target="_blank"
-    rel="noopener noreferrer"
+    href={`${cvUrl}?dl=Daria-Artemova-CV.pdf`}
     class="download-cv"
-    aria-label="Download CV"
-    id="cv-download-link"
+    data-track="cv_download"
+    data-track-location={location}
   >
     <DownloadIcon class="icon" />
     <slot>Download CV</slot>
@@ -33,10 +33,10 @@ const { cvUrl } = Astro.props;
     align-items: center;
     justify-content: center;
     gap: var(--spacing-16);
-    border: 1px solid var(--black);
+    border: var(--border-width) solid var(--black);
     font-size: var(--font-size-16-20);
     font-weight: 600;
-    transition: color 0.5s ease-in-out;
+    transition: color var(--transition-slow);
     overflow: hidden;
   }
 
@@ -51,7 +51,7 @@ const { cvUrl } = Astro.props;
     z-index: -1;
     transform: scaleX(0);
     transform-origin: left;
-    transition: transform 0.5s ease-in-out;
+    transition: transform var(--transition-slow);
   }
 
   .download-cv:hover {
@@ -74,14 +74,3 @@ const { cvUrl } = Astro.props;
     }
   }
 </style>
-
-<script>
-  import { trackEvent } from "../lib/analytics";
-
-  const cvLink = document.getElementById("cv-download-link");
-  cvLink?.addEventListener("click", () => {
-    trackEvent("cv_download", {
-      file_name: "Daria Artemova CV.pdf",
-    });
-  });
-</script>

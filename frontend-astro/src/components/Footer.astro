@@ -1,15 +1,19 @@
 ---
 import WidthContainer from "./WidthContainer.astro";
 import Heart from "./icons/Heart.astro";
+
+// The site is rebuilt on every content publish, so the build year is current.
+const year = new Date().getFullYear();
 ---
 
 <footer class="footer">
   <WidthContainer>
     <div class="footer-content">
       <p class="made-with">
-        Made with <Heart class="heart-icon" /> by Daria
+        Made with <Heart class="heart-icon" />
+        <span class="visually-hidden">love</span> by Daria
       </p>
-      <p class="year">2026</p>
+      <p class="year">{year}</p>
     </div>
   </WidthContainer>
 </footer>
