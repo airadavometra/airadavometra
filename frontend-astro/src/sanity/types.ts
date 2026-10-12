@@ -118,6 +118,15 @@ export type HomePage = {
     _key: string;
   }>;
   projects?: Array<{
+    screenshots: Array<{
+      asset?: SanityImageAssetReference;
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      alt?: string;
+      _type: "image";
+      _key: string;
+    }>;
     image?: {
       asset?: SanityImageAssetReference;
       media?: unknown;

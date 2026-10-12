@@ -182,12 +182,37 @@ export const homePage = defineType({
           name: 'projectItem',
           fields: [
             defineField({
+              name: 'screenshots',
+              title: 'Screenshots',
+              description: 'The first one is the cover.',
+              type: 'array',
+              of: [
+                defineArrayMember({
+                  type: 'image',
+                  options: {
+                    hotspot: true,
+                  },
+                  fields: [
+                    defineField({
+                      name: 'alt',
+                      type: 'string',
+                      title: 'Alternative Text',
+                      description: 'Leave empty to use "<project title> screenshot".',
+                    }),
+                  ],
+                }),
+              ],
+              validation: (Rule) => Rule.required().min(1),
+            }),
+            // Replaced by `screenshots`. Remove once the migration has run.
+            defineField({
               name: 'image',
               title: 'Project Image',
               type: 'image',
               options: {
                 hotspot: true,
               },
+              hidden: true,
             }),
             defineField({
               name: 'title',
@@ -202,6 +227,7 @@ export const homePage = defineType({
             defineField({
               name: 'link',
               title: 'Project Link',
+              description: 'Optional. Without a link, the title shows as plain text.',
               type: 'url',
             }),
             defineField({
@@ -224,7 +250,7 @@ export const homePage = defineType({
             select: {
               title: 'title',
               subtitle: 'year',
-              media: 'image',
+              media: 'screenshots.0',
             },
           },
         }),
