@@ -12,9 +12,29 @@ import { client } from "../lib/sanity";
 import { pageQuery } from "../lib/queries";
 
 const { settings, home } = await client.fetch(pageQuery);
+
+// Structured data for search engines: who the page is about, and which
+// profiles are the same person. The title reads "Name — Role".
+const [name, jobTitle] = (home?.title ?? "").split(" — ");
+const person = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: name || "Daria Artemova",
+  ...(jobTitle && { jobTitle }),
+  url: Astro.site?.href,
+  sameAs: [home?.githubLink, home?.linkedinLink].filter(Boolean),
+};
+// Escape "<" so CMS text can never close the script tag early
+const personJson = JSON.stringify(person).replace(/</g, "\\u003c");
 ---
 
 <Layout settings={settings}>
+  <script
+    is:inline
+    type="application/ld+json"
+    slot="head"
+    set:html={personJson}
+  />
   <Header
     githubLink={home?.githubLink}
     linkedinLink={home?.linkedinLink}

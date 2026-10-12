@@ -13,8 +13,9 @@ interface Props {
 }
 
 const { settings } = Astro.props;
-const siteTitle = settings?.siteTitle;
+const title = settings?.siteTitle || "Daria Artemova";
 const metaDescription = settings?.metaDescription;
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site).href;
 const faviconUrl = settings?.favicon ? urlFor(settings.favicon).url() : "";
 const shareImageUrl = settings?.shareImage
   ? urlFor(settings.shareImage).width(1200).height(630).url()
@@ -25,7 +26,7 @@ const shareImageUrl = settings?.shareImage
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
     <!-- Self-hosted Open Sans; preload the Latin subset every page needs -->
     <link
@@ -37,17 +38,34 @@ const shareImageUrl = settings?.shareImage
     />
 
     <!-- SEO -->
-    <title>{siteTitle || "Daria Artemova"}</title>
-    <meta name="description" content={metaDescription} />
+    <title>{title}</title>
+    {metaDescription && <meta name="description" content={metaDescription} />}
+    <link rel="canonical" href={canonicalUrl} />
 
     <!-- Favicon -->
     {faviconUrl && <link rel="icon" href={faviconUrl} />}
 
-    <!-- Open Graph -->
-    <meta property="og:title" content={siteTitle} />
-    <meta property="og:description" content={metaDescription} />
-    {shareImageUrl && <meta property="og:image" content={shareImageUrl} />}
+    <!-- Open Graph (link previews) -->
     <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:title" content={title} />
+    {metaDescription && (
+      <meta property="og:description" content={metaDescription} />
+    )}
+    {shareImageUrl && (
+      <>
+        <meta property="og:image" content={shareImageUrl} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+      </>
+    )}
+    <!-- X uses the Open Graph tags above, but needs this for the big image -->
+    <meta
+      name="twitter:card"
+      content={shareImageUrl ? "summary_large_image" : "summary"}
+    />
+
+    <slot name="head" />
   </head>
   <body>
     <slot />
