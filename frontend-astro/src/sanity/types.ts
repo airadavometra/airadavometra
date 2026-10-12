@@ -26,8 +26,8 @@ export type Settings = {
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
-  siteTitle?: string;
-  metaDescription?: string;
+  siteTitle: string;
+  metaDescription: string;
   favicon?: {
     asset?: SanityImageAssetReference;
     media?: unknown;
@@ -80,7 +80,7 @@ export type HomePage = {
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
-  title?: string;
+  title: string;
   heroImage?: {
     asset?: SanityImageAssetReference;
     media?: unknown;
@@ -101,14 +101,14 @@ export type HomePage = {
   aboutMeDescription?: string;
   experienceYears?: number;
   experience?: Array<{
-    title?: string;
-    duration?: string;
+    title: string;
+    duration: string;
     description?: string;
     _type: "experienceItem";
     _key: string;
   }>;
   skills?: Array<{
-    name?: string;
+    name: string;
     icon?: {
       asset?: SanityFileAssetReference;
       media?: unknown;
@@ -127,7 +127,7 @@ export type HomePage = {
       _type: "image";
       _key: string;
     }>;
-    title?: string;
+    title: string;
     year?: string;
     link?: string;
     description?: string;
@@ -287,8 +287,8 @@ export declare const internalGroqTypeReferenceTo: unique symbol;
 // Query: {  "settings": *[_type == "settings"][0] {    siteTitle,    metaDescription,    favicon,    shareImage  },  "home": *[_type == "homePage"][0] {    title,    heroImage,    aboutMeImage,    aboutMeTitle,    aboutMeSubtitle,    aboutMeDescription,    "cvUrl": cvFile.asset->url,    experienceYears,    experience[] { _key, title, duration, description },    skills[] { _key, name, "iconUrl": icon.asset->url },    projects[] { _key, title, year, link, description, tags, screenshots },    githubLink,    linkedinLink,    email,    contactSectionTitle,    contactSectionImage,    featuredManga1-> { title, images },    featuredManga2-> { title, images },    featuredManga3-> { title, images }  }}
 export type PageQueryResult = {
   settings: {
-    siteTitle: string | null;
-    metaDescription: string | null;
+    siteTitle: string;
+    metaDescription: string;
     favicon: {
       asset?: SanityImageAssetReference;
       media?: unknown;
@@ -305,7 +305,7 @@ export type PageQueryResult = {
     } | null;
   } | null;
   home: {
-    title: string | null;
+    title: string;
     heroImage: {
       asset?: SanityImageAssetReference;
       media?: unknown;
@@ -328,18 +328,18 @@ export type PageQueryResult = {
     experienceYears: number | null;
     experience: Array<{
       _key: string;
-      title: string | null;
-      duration: string | null;
+      title: string;
+      duration: string;
       description: string | null;
     }> | null;
     skills: Array<{
       _key: string;
-      name: string | null;
+      name: string;
       iconUrl: string | null;
     }> | null;
     projects: Array<{
       _key: string;
-      title: string | null;
+      title: string;
       year: string | null;
       link: string | null;
       description: string | null;

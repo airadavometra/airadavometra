@@ -51,6 +51,9 @@ export const homePage = defineType({
       name: 'title',
       title: 'Page Title',
       type: 'string',
+      description:
+        'Format: "Name — Role". The page\'s hidden main heading; search engines also read your name and role from it.',
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'heroImage',
@@ -74,6 +77,8 @@ export const homePage = defineType({
           name: 'alt',
           type: 'string',
           title: 'Alternative Text',
+          description:
+            'Not used: the illustration is decorative, so the site tells screen readers to skip it.',
         }),
       ],
     }),
@@ -100,6 +105,7 @@ export const homePage = defineType({
       name: 'experienceYears',
       title: 'Experience Years',
       type: 'number',
+      fieldset: 'experience',
     }),
     defineField({
       name: 'experience',
@@ -116,12 +122,14 @@ export const homePage = defineType({
               name: 'title',
               title: 'Job Title',
               type: 'string',
+              validation: (Rule) => Rule.required(),
             }),
             defineField({
               name: 'duration',
               title: 'Time (from - to)',
               type: 'string',
               description: 'e.g. 2020 - 2022 or 2021 - Present',
+              validation: (Rule) => Rule.required(),
             }),
             defineField({
               name: 'description',
@@ -154,11 +162,16 @@ export const homePage = defineType({
               name: 'name',
               title: 'Skill Name',
               type: 'string',
+              validation: (Rule) => Rule.required(),
             }),
             defineField({
               name: 'icon',
-              title: 'Icon (prefferably SVG)',
+              title: 'Icon (SVG)',
+              description: 'Inlined into the page, so it has to be an SVG.',
               type: 'file',
+              options: {
+                accept: 'image/svg+xml',
+              },
             }),
           ],
           preview: {
@@ -208,6 +221,7 @@ export const homePage = defineType({
               name: 'title',
               title: 'Project Title',
               type: 'string',
+              validation: (Rule) => Rule.required(),
             }),
             defineField({
               name: 'year',
@@ -271,6 +285,9 @@ export const homePage = defineType({
       type: 'file',
       fieldset: 'contact',
       icon: DocumentIcon,
+      options: {
+        accept: 'application/pdf',
+      },
     }),
     defineField({
       name: 'contactSectionTitle',

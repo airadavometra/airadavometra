@@ -11,6 +11,8 @@ export const settings = defineType({
       name: 'siteTitle',
       title: 'Site Title',
       type: 'string',
+      description: 'Shown in the browser tab, search results and link previews',
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'metaDescription',
@@ -18,7 +20,7 @@ export const settings = defineType({
       type: 'text',
       rows: 3,
       description: 'A short description for search engine results (SEO)',
-      validation: (Rule) => Rule.max(160),
+      validation: (Rule) => Rule.required().max(160),
     }),
     defineField({
       name: 'favicon',
