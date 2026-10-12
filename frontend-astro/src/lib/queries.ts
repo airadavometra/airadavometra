@@ -22,7 +22,7 @@ export const pageQuery = defineQuery(`{
     experienceYears,
     experience[] { _key, title, duration, description },
     skills[] { _key, name, "iconUrl": icon.asset->url },
-    projects[] { _key, title, year, link, description, tags, image },
+    projects[] { _key, title, year, link, description, tags, screenshots },
     githubLink,
     linkedinLink,
     email,

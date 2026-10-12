@@ -291,7 +291,7 @@ export declare const internalGroqTypeReferenceTo: unique symbol;
 
 // Source: ../frontend-astro/src/lib/queries.ts
 // Variable: pageQuery
-// Query: {  "settings": *[_type == "settings"][0] {    siteTitle,    metaDescription,    favicon,    shareImage  },  "home": *[_type == "homePage"][0] {    title,    heroImage,    aboutMeImage,    aboutMeTitle,    aboutMeSubtitle,    aboutMeDescription,    "cvUrl": cvFile.asset->url,    experienceYears,    experience[] { _key, title, duration, description },    skills[] { _key, name, "iconUrl": icon.asset->url },    projects[] { _key, title, year, link, description, tags, image },    githubLink,    linkedinLink,    email,    contactSectionTitle,    contactSectionImage,    featuredManga1-> { title, images },    featuredManga2-> { title, images },    featuredManga3-> { title, images }  }}
+// Query: {  "settings": *[_type == "settings"][0] {    siteTitle,    metaDescription,    favicon,    shareImage  },  "home": *[_type == "homePage"][0] {    title,    heroImage,    aboutMeImage,    aboutMeTitle,    aboutMeSubtitle,    aboutMeDescription,    "cvUrl": cvFile.asset->url,    experienceYears,    experience[] { _key, title, duration, description },    skills[] { _key, name, "iconUrl": icon.asset->url },    projects[] { _key, title, year, link, description, tags, screenshots },    githubLink,    linkedinLink,    email,    contactSectionTitle,    contactSectionImage,    featuredManga1-> { title, images },    featuredManga2-> { title, images },    featuredManga3-> { title, images }  }}
 export type PageQueryResult = {
   settings: {
     siteTitle: string | null;
@@ -351,13 +351,15 @@ export type PageQueryResult = {
       link: string | null;
       description: string | null;
       tags: Array<string> | null;
-      image: {
+      screenshots: Array<{
         asset?: SanityImageAssetReference;
         media?: unknown;
         hotspot?: SanityImageHotspot;
         crop?: SanityImageCrop;
+        alt?: string;
         _type: "image";
-      } | null;
+        _key: string;
+      }>;
     }> | null;
     githubLink: string | null;
     linkedinLink: string | null;
@@ -413,7 +415,7 @@ export type PageQueryResult = {
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
-    "{\n  \"settings\": *[_type == \"settings\"][0] {\n    siteTitle,\n    metaDescription,\n    favicon,\n    shareImage\n  },\n  \"home\": *[_type == \"homePage\"][0] {\n    title,\n    heroImage,\n    aboutMeImage,\n    aboutMeTitle,\n    aboutMeSubtitle,\n    aboutMeDescription,\n    \"cvUrl\": cvFile.asset->url,\n    experienceYears,\n    experience[] { _key, title, duration, description },\n    skills[] { _key, name, \"iconUrl\": icon.asset->url },\n    projects[] { _key, title, year, link, description, tags, image },\n    githubLink,\n    linkedinLink,\n    email,\n    contactSectionTitle,\n    contactSectionImage,\n    featuredManga1-> { title, images },\n    featuredManga2-> { title, images },\n    featuredManga3-> { title, images }\n  }\n}": PageQueryResult;
+    "{\n  \"settings\": *[_type == \"settings\"][0] {\n    siteTitle,\n    metaDescription,\n    favicon,\n    shareImage\n  },\n  \"home\": *[_type == \"homePage\"][0] {\n    title,\n    heroImage,\n    aboutMeImage,\n    aboutMeTitle,\n    aboutMeSubtitle,\n    aboutMeDescription,\n    \"cvUrl\": cvFile.asset->url,\n    experienceYears,\n    experience[] { _key, title, duration, description },\n    skills[] { _key, name, \"iconUrl\": icon.asset->url },\n    projects[] { _key, title, year, link, description, tags, screenshots },\n    githubLink,\n    linkedinLink,\n    email,\n    contactSectionTitle,\n    contactSectionImage,\n    featuredManga1-> { title, images },\n    featuredManga2-> { title, images },\n    featuredManga3-> { title, images }\n  }\n}": PageQueryResult;
   }
 }
 
