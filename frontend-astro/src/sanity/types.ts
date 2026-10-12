@@ -127,13 +127,6 @@ export type HomePage = {
       _type: "image";
       _key: string;
     }>;
-    image?: {
-      asset?: SanityImageAssetReference;
-      media?: unknown;
-      hotspot?: SanityImageHotspot;
-      crop?: SanityImageCrop;
-      _type: "image";
-    };
     title?: string;
     year?: string;
     link?: string;

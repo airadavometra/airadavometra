@@ -204,16 +204,6 @@ export const homePage = defineType({
               ],
               validation: (Rule) => Rule.required().min(1),
             }),
-            // Replaced by `screenshots`. Remove once the migration has run.
-            defineField({
-              name: 'image',
-              title: 'Project Image',
-              type: 'image',
-              options: {
-                hotspot: true,
-              },
-              hidden: true,
-            }),
             defineField({
               name: 'title',
               title: 'Project Title',
