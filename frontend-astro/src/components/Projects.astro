@@ -1,5 +1,5 @@
 ---
-import { urlFor } from "../lib/sanity";
+import { sanityImage } from "../lib/image";
 import type { Home } from "../lib/queries";
 import WidthContainer from "./WidthContainer.astro";
 import ExternalLinkIcon from "./icons/ExternalLink.astro";
@@ -31,9 +31,15 @@ const { projects, githubLink } = Astro.props;
                 data-track-project={project.title}
               >
                 <img
-                  src={urlFor(project.image).url()}
+                  {...sanityImage(project.image, {
+                    widths: [400, 700, 1000, 1400],
+                    sizes:
+                      "(max-width: 48rem) calc(100vw - 32px), min(688px, calc(50vw - 48px))",
+                  })}
                   alt={`${project.title} screenshot`}
                   class="project-image"
+                  loading="lazy"
+                  decoding="async"
                 />
               </a>
             )}

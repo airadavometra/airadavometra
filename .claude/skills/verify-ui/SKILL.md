@@ -55,4 +55,11 @@ npx -y lighthouse@12 http://localhost:4321 --output=json --output-path=<scratchp
   --chrome-flags="--headless=new" --only-categories=performance,accessibility,best-practices,seo --quiet
 ```
 
-Add `--preset=desktop` for desktop. Report LCP, CLS and total byte weight against the previous run. The October 2026 baseline was: mobile performance 61, LCP 7.2 s, CLS 0.28, 4.1 MB.
+Add `--preset=desktop` for desktop. Report LCP, CLS and total byte weight against the previous run, and treat a regression as a bug.
+
+| Lighthouse (local preview) | Mobile perf | Mobile LCP | CLS | Weight (mobile / desktop) |
+| --- | --- | --- | --- | --- |
+| Oct 2026, before the audit | 61 | 7.2 s | 0.28 | 4.1 MB / 4.1 MB |
+| After Phase 3 (performance) | 96 | 2.6 s | 0 | 560 KB / 401 KB |
+
+Scroll smoothness was measured with a 4× CPU slowdown: 60 fps with or without the full-page texture overlays. Re-measure if you add anything that animates over large areas.

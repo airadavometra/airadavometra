@@ -1,5 +1,5 @@
 ---
-import { urlFor } from "../lib/sanity";
+import { sanityImage } from "../lib/image";
 import type { Home } from "../lib/queries";
 import WidthContainer from "./WidthContainer.astro";
 import DownloadCvButton from "./DownloadCvButton.astro";
@@ -17,7 +17,18 @@ const { image, title, subtitle, description, cvUrl } = Astro.props;
 
 <WidthContainer>
   <section id="about" class="about-section">
-    {image && <img class="image" src={urlFor(image).url()} alt="" />}
+    {image && (
+      <img
+        class="image"
+        {...sanityImage(image, {
+          widths: [400, 500, 640, 800, 1000],
+          sizes: "(max-width: 48rem) calc(100vw - 32px), 500px",
+        })}
+        alt=""
+        loading="lazy"
+        decoding="async"
+      />
+    )}
 
     <div class="content-wrapper">
       <div class="title-wrapper">

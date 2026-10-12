@@ -1,5 +1,5 @@
 ---
-import { urlFor } from "../lib/sanity";
+import { sanityImage } from "../lib/image";
 import type { Home } from "../lib/queries";
 import WidthContainer from "./WidthContainer.astro";
 
@@ -16,7 +16,14 @@ const { title, image } = Astro.props;
 
   {image && (
     <WidthContainer>
-      <img src={urlFor(image).url()} alt="" role="presentation" />
+      <img
+        {...sanityImage(image, {
+          widths: [400, 600, 700, 800],
+          sizes: "(max-width: 1172px) calc(100vw - 32px), 1140px",
+        })}
+        alt=""
+        fetchpriority="high"
+      />
     </WidthContainer>
   )}
 

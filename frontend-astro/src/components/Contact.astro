@@ -1,5 +1,5 @@
 ---
-import { urlFor } from "../lib/sanity";
+import { sanityImage } from "../lib/image";
 import type { Home } from "../lib/queries";
 import WidthContainer from "./WidthContainer.astro";
 import ExternalLinkIcon from "./icons/ExternalLink.astro";
@@ -54,7 +54,16 @@ const { title, email, linkedinLink, image } = Astro.props;
     {image && (
       <div class="contact-image-wrapper">
         <WidthContainer>
-          <img src={urlFor(image).url()} alt="" class="contact-image" />
+          <img
+            {...sanityImage(image, {
+              widths: [400, 800, 1200],
+              sizes: "(max-width: 48rem) 100vw, 800px",
+            })}
+            alt=""
+            class="contact-image"
+            loading="lazy"
+            decoding="async"
+          />
         </WidthContainer>
       </div>
     )}

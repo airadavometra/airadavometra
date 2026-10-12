@@ -34,6 +34,12 @@ The output is static, so publishing in the Studio only shows up after a rebuild 
 
 - Astro components with a scoped `<style>` block; site-wide tokens, resets and utilities live in `src/styles/global.css`. Follow the `css` skill for any styling work.
 - Interactivity is a plain `<script>` in the component. No React or other UI-framework islands.
+- CMS images always go through `sanityImage()` (`src/lib/image.ts`), spread onto the `<img>`. It gives a resized WebP/AVIF `srcset` plus intrinsic `width`/`height`.
+  - Pass `sizes` matching the image's real rendered width.
+  - The hero (the LCP element) gets `fetchpriority="high"`; every other image gets `loading="lazy" decoding="async"`.
+  - Never use a bare `urlFor(image).url()` in markup.
+- The font is Open Sans Variable, self-hosted through `@fontsource-variable/open-sans` and imported in `Layout.astro`, which also preloads the Latin file. Don't add Google Fonts links.
+- Static assets in `public/` stay small: prefer WebP (the ink texture is lossless WebP). CSS is inlined into the HTML (`build.inlineStylesheets: "always"`).
 - Icons are `.astro` SVG components in `src/components/icons/`, using `fill="currentColor"` and `aria-hidden="true"`. Skill icons uploaded to the CMS are inlined at build time through `inlineSvg` (`src/lib/svg.ts`), which strips anything executable.
 - Analytics is Vercel Web Analytics. To track a click, add `data-track="event_name"` and optional `data-track-<prop>="value"` to the element; a single listener in `src/lib/analytics.ts` sends it. Never send visitor data.
 - The design is light-only on purpose: two full-page texture overlays (`body::before`/`::after`) multiply over everything.

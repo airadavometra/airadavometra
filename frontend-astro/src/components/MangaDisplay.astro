@@ -1,5 +1,5 @@
 ---
-import { urlFor } from "../lib/sanity";
+import { sanityImage } from "../lib/image";
 import type { Manga } from "../lib/queries";
 import WidthContainer from "./WidthContainer.astro";
 
@@ -23,9 +23,15 @@ if (!manga?.title || !manga.images?.length) {
       <div class="images-container">
         {manga.images.map((image) => (
           <img
-            src={urlFor(image).url()}
+            {...sanityImage(image, {
+              widths: [360, 540, 720, 1080],
+              sizes:
+                "(max-width: 48rem) calc(100vw - 32px), min(360px, calc((100vw - 32px) / 4))",
+            })}
             alt={image.alt || manga.title}
             class="manga-panel"
+            loading="lazy"
+            decoding="async"
           />
         ))}
       </div>

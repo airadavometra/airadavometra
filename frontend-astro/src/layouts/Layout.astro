@@ -1,4 +1,7 @@
 ---
+import "@fontsource-variable/open-sans/wght.css";
+import "@fontsource-variable/open-sans/wght-italic.css";
+import openSansLatin from "@fontsource-variable/open-sans/files/open-sans-latin-wght-normal.woff2?url";
 import "../styles/reset.css";
 import "../styles/global.css";
 import Analytics from "@vercel/analytics/astro";
@@ -24,6 +27,14 @@ const shareImageUrl = settings?.shareImage
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
+    <!-- Self-hosted Open Sans; preload the Latin subset every page needs -->
+    <link
+      rel="preload"
+      href={openSansLatin}
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
 
     <!-- SEO -->
     <title>{siteTitle || "Daria Artemova"}</title>
