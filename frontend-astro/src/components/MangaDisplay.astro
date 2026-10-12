@@ -32,15 +32,13 @@ if (!manga?.title || !manga?.images?.length) {
       <h2 class="title sr-only">Manga panel: {manga.title}</h2>
 
       <div class="images-container">
-        {
-          manga.images.map((image: any) => (
-            <img
-              src={urlFor(image).url()}
-              alt={image.alt || manga.title}
-              class="manga-panel"
-            />
-          ))
-        }
+        {manga.images.map((image: any) => (
+          <img
+            src={urlFor(image).url()}
+            alt={image.alt || manga.title}
+            class="manga-panel"
+          />
+        ))}
       </div>
     </section>
   </WidthContainer>

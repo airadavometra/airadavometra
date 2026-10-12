@@ -11,7 +11,7 @@
   (async () => {
     try {
       await initializeAnalytics();
-      
+
       // Track page view
       trackPageView(window.location.pathname, document.title);
     } catch (error) {

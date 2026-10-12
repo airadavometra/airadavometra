@@ -21,18 +21,18 @@ const { githubLink, linkedinLink, cvUrl } = data || {};
   <WidthContainer>
     <div class="header-content">
       <nav class="navigation desktop-only">
-        <a href="#experience" class="nav-link hover-underline"
-          ><span>Experience</span></a
-        >
-        <a href="#skills" class="nav-link hover-underline"
-          ><span>Skills</span></a
-        >
-        <a href="#projects" class="nav-link hover-underline"
-          ><span>Pet projects</span></a
-        >
-        <a href="#contact" class="nav-link hover-underline"
-          ><span>Contact</span></a
-        >
+        <a href="#experience" class="nav-link hover-underline">
+          <span>Experience</span>
+        </a>
+        <a href="#skills" class="nav-link hover-underline">
+          <span>Skills</span>
+        </a>
+        <a href="#projects" class="nav-link hover-underline">
+          <span>Pet projects</span>
+        </a>
+        <a href="#contact" class="nav-link hover-underline">
+          <span>Contact</span>
+        </a>
       </nav>
 
       <div class="mobile-only">
@@ -46,41 +46,45 @@ const { githubLink, linkedinLink, cvUrl } = data || {};
           <CloseIcon class="icon" />
         </button>
         <nav class="mobile-navigation">
-          <a href="#experience" class="nav-link js-mobile-link">Experience</a>
-          <a href="#skills" class="nav-link js-mobile-link">Skills</a>
-          <a href="#projects" class="nav-link js-mobile-link">Pet projects</a>
-          <a href="#contact" class="nav-link js-mobile-link">Contact</a>
+          <a href="#experience" class="nav-link js-mobile-link">
+            Experience
+          </a>
+          <a href="#skills" class="nav-link js-mobile-link">
+            Skills
+          </a>
+          <a href="#projects" class="nav-link js-mobile-link">
+            Pet projects
+          </a>
+          <a href="#contact" class="nav-link js-mobile-link">
+            Contact
+          </a>
         </nav>
       </div>
       <div class="mobile-menu-overlay js-menu-overlay"></div>
 
       <div class="actions">
-        {
-          githubLink && (
-            <a
-              href={githubLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="GitHub"
-              class="icon-link hover-scale"
-            >
-              <GithubIcon class="icon" />
-            </a>
-          )
-        }
-        {
-          linkedinLink && (
-            <a
-              href={linkedinLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="LinkedIn"
-              class="icon-link hover-scale"
-            >
-              <LinkedinIcon class="icon" />
-            </a>
-          )
-        }
+        {githubLink && (
+          <a
+            href={githubLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="GitHub"
+            class="icon-link hover-scale"
+          >
+            <GithubIcon class="icon" />
+          </a>
+        )}
+        {linkedinLink && (
+          <a
+            href={linkedinLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="LinkedIn"
+            class="icon-link hover-scale"
+          >
+            <LinkedinIcon class="icon" />
+          </a>
+        )}
         {cvUrl && <DownloadCvButton cvUrl={cvUrl} />}
       </div>
     </div>

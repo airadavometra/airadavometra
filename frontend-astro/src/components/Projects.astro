@@ -24,74 +24,70 @@ const { projects = [], githubLink } = data || {};
     <h2 class="title">Pet projects</h2>
 
     <ul class="projects-list">
-      {
-        projects.map((project: any) => (
-          <li class="project-item">
-            <div class="project-image-container">
-              {project.image && (
-                <a
-                  href={project.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={`Open ${project.title}`}
-                  data-project-name={project.title}
-                >
-                  <img
-                    src={urlFor(project.image).url()}
-                    alt={`${project.title} screenshot`}
-                    class="project-image"
-                  />
-                </a>
-              )}
-            </div>
-
-            <div class="project-header">
-              {project.link && (
-                <a
-                  href={project.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="project-link hover-underline project-click"
-                  aria-label={`Open ${project.title}`}
-                  data-project-name={project.title}
-                >
-                  <span>{project.title}</span>
-                  <ExternalLinkIcon class="icon" />
-                </a>
-              )}
-              <span class="project-year">{project.year}</span>
-            </div>
-
-            <p class="project-description">{project.description}</p>
-
-            {project.tags && project.tags.length > 0 && (
-              <ul class="project-tags">
-                {project.tags.map((tag: string) => (
-                  <li class="project-tag">{tag}</li>
-                ))}
-              </ul>
+      {projects.map((project: any) => (
+        <li class="project-item">
+          <div class="project-image-container">
+            {project.image && (
+              <a
+                href={project.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Open ${project.title}`}
+                data-project-name={project.title}
+              >
+                <img
+                  src={urlFor(project.image).url()}
+                  alt={`${project.title} screenshot`}
+                  class="project-image"
+                />
+              </a>
             )}
-          </li>
-        ))
-      }
+          </div>
+
+          <div class="project-header">
+            {project.link && (
+              <a
+                href={project.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="project-link hover-underline project-click"
+                aria-label={`Open ${project.title}`}
+                data-project-name={project.title}
+              >
+                <span>{project.title}</span>
+                <ExternalLinkIcon class="icon" />
+              </a>
+            )}
+            <span class="project-year">{project.year}</span>
+          </div>
+
+          <p class="project-description">{project.description}</p>
+
+          {project.tags && project.tags.length > 0 && (
+            <ul class="project-tags">
+              {project.tags.map((tag: string) => (
+                <li class="project-tag">{tag}</li>
+              ))}
+            </ul>
+          )}
+        </li>
+      ))}
     </ul>
 
-    {
-      githubLink && (
-        <div class="github-link-wrapper">
-          <a
-            href={githubLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="github-link hover-underline"
-            id="github-link"
-          >
-            <span>Check out my GitHub</span>
-            <Github class="github-icon" />
-          </a>
-        </div>
-      )
-    }
+    {githubLink && (
+      <div class="github-link-wrapper">
+        <a
+          href={githubLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="github-link hover-underline"
+          id="github-link"
+        >
+          <span>Check out my GitHub</span>
+          <Github class="github-icon" />
+        </a>
+      </div>
+    )}
   </section>
 </WidthContainer>
 

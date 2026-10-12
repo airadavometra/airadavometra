@@ -13,39 +13,39 @@ const settings = await client.fetch(`*[_type == "settings"][0] {
 
 const { siteTitle, metaDescription, favicon, shareImage } = settings || {};
 const faviconUrl = favicon ? urlFor(favicon).url() : "";
-const shareImageUrl = shareImage ? urlFor(shareImage).width(1200).height(630).url() : "";
+const shareImageUrl = shareImage
+  ? urlFor(shareImage).width(1200).height(630).url()
+  : "";
 ---
 
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		
-		<!-- SEO -->
-		<title>{siteTitle || "Daria Artemova"}</title>
-		<meta name="description" content={metaDescription} />
-		
-		<!-- Favicon -->
-		{faviconUrl && <link rel="icon" href={faviconUrl} />}
-		
-		<!-- Open Graph -->
-		<meta property="og:title" content={siteTitle} />
-		<meta property="og:description" content={metaDescription} />
-		{shareImageUrl && <meta property="og:image" content={shareImageUrl} />}
-		<meta property="og:type" content="website" />
-	</head>
-	<body>
-		<slot />
-		<FirebaseAnalytics />
-		<script>
-			import { inject } from "@vercel/analytics";
-			inject();
-		</script>
-	</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- SEO -->
+    <title>{siteTitle || "Daria Artemova"}</title>
+    <meta name="description" content={metaDescription} />
+
+    <!-- Favicon -->
+    {faviconUrl && <link rel="icon" href={faviconUrl} />}
+
+    <!-- Open Graph -->
+    <meta property="og:title" content={siteTitle} />
+    <meta property="og:description" content={metaDescription} />
+    {shareImageUrl && <meta property="og:image" content={shareImageUrl} />}
+    <meta property="og:type" content="website" />
+  </head>
+  <body>
+    <slot />
+    <FirebaseAnalytics />
+    <script>
+      import { inject } from "@vercel/analytics";
+      inject();
+    </script>
+  </body>
 </html>
 
-<style>
-	
-</style>
+<style></style>

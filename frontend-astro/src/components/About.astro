@@ -22,25 +22,21 @@ const {
 
 <WidthContainer>
   <section id="about" class="about-section">
-    {
-      aboutMeImage && (
-        <img class="image" src={urlFor(aboutMeImage).url()} alt={""} />
-      )
-    }
+    {aboutMeImage && (
+      <img class="image" src={urlFor(aboutMeImage).url()} alt={""} />
+    )}
 
     <div class="content-wrapper">
       <div class="title-wrapper">
         {aboutMeTitle && <h2 class="title">{aboutMeTitle}</h2>}
         {aboutMeSubtitle && <p class="subtitle">{aboutMeSubtitle}</p>}
       </div>
-      {
-        aboutMeDescription
-          ?.split("\n")
-          .map(
-            (paragraph: string) =>
-              paragraph && <p class="description">{paragraph}</p>,
-          )
-      }
+      {aboutMeDescription
+        ?.split("\n")
+        .map(
+          (paragraph: string) =>
+            paragraph && <p class="description">{paragraph}</p>,
+        )}
       <div class="cta-button-wrapper">
         <DownloadCvButton cvUrl={cvUrl} />
       </div>

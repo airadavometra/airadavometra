@@ -11,13 +11,11 @@ const { title, heroImage } = data || {};
 <section class="hero-section">
   <h1 class="visually-hidden">{title}</h1>
 
-  {
-    heroImage && (
-      <WidthContainer>
-        <img src={urlFor(heroImage).url()} alt="" role="presentation" />
-      </WidthContainer>
-    )
-  }
+  {heroImage && (
+    <WidthContainer>
+      <img src={urlFor(heroImage).url()} alt="" role="presentation" />
+    </WidthContainer>
+  )}
 
   <div class="blue-rectangle"></div>
 </section>

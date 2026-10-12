@@ -24,55 +24,47 @@ const {
     <div class="info-wrapper">
       <h2 class="title">{contactSectionTitle}</h2>
       <div class="links-wrapper">
-        {
-          email && (
-            <button
-              class="contact-link hover-underline js-copy-email"
-              data-email={email}
-              aria-label="Copy email"
-              id="email-copy-btn"
-            >
-              <span class="email-container">
-                <span class="email-text js-email-text">{email}</span>
-                <span class="copied-text js-copied-text">
-                  Email was copied!
-                </span>
-              </span>
-              <CopyIcon class="icon" />
-            </button>
-          )
-        }
+        {email && (
+          <button
+            class="contact-link hover-underline js-copy-email"
+            data-email={email}
+            aria-label="Copy email"
+            id="email-copy-btn"
+          >
+            <span class="email-container">
+              <span class="email-text js-email-text">{email}</span>
+              <span class="copied-text js-copied-text">Email was copied!</span>
+            </span>
+            <CopyIcon class="icon" />
+          </button>
+        )}
 
-        {
-          linkedinLink && (
-            <a
-              href={linkedinLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="contact-link hover-underline"
-              id="linkedin-link"
-            >
-              <span>LinkedIn</span>
-              <ExternalLinkIcon class="icon" />
-            </a>
-          )
-        }
+        {linkedinLink && (
+          <a
+            href={linkedinLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="contact-link hover-underline"
+            id="linkedin-link"
+          >
+            <span>LinkedIn</span>
+            <ExternalLinkIcon class="icon" />
+          </a>
+        )}
       </div>
     </div>
 
-    {
-      contactSectionImage && (
-        <div class="contact-image-wrapper">
-          <WidthContainer>
-            <img
-              src={urlFor(contactSectionImage).url()}
-              alt=""
-              class="contact-image"
-            />
-          </WidthContainer>
-        </div>
-      )
-    }
+    {contactSectionImage && (
+      <div class="contact-image-wrapper">
+        <WidthContainer>
+          <img
+            src={urlFor(contactSectionImage).url()}
+            alt=""
+            class="contact-image"
+          />
+        </WidthContainer>
+      </div>
+    )}
   </section>
 </WidthContainer>
 

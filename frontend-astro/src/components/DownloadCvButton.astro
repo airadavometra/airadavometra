@@ -8,21 +8,19 @@ interface Props {
 const { cvUrl } = Astro.props;
 ---
 
-{
-  cvUrl && (
-    <a
-      href={`${cvUrl}?filename="Daria Artemova CV.pdf"`}
-      target="_blank"
-      rel="noopener noreferrer"
-      class="download-cv"
-      aria-label="Download CV"
-      id="cv-download-link"
-    >
-      <DownloadIcon class="icon" />
-      <slot>Download CV</slot>
-    </a>
-  )
-}
+{cvUrl && (
+  <a
+    href={`${cvUrl}?filename="Daria Artemova CV.pdf"`}
+    target="_blank"
+    rel="noopener noreferrer"
+    class="download-cv"
+    aria-label="Download CV"
+    id="cv-download-link"
+  >
+    <DownloadIcon class="icon" />
+    <slot>Download CV</slot>
+  </a>
+)}
 
 <style>
   .download-cv {
