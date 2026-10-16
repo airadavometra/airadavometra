@@ -88,7 +88,8 @@ Never run `git commit` or `git push`; the user reviews and commits everything. F
 - Lighthouse reports accessibility 100 even with contrast failures, because axe can't see text through the overlays. Use `npm run a11y`, which hides them first.
 - `html` has `scroll-behavior: smooth`. Scripts that scroll must pass `behavior: "instant"`, or screenshots catch the page mid-scroll.
 - `/_vercel/insights/script.js` 404s locally. That's expected; it only exists on Vercel.
-- `vercel.json` permanently redirects (308) every extensionless path to `/`. Switch it to `permanent: false` before adding any new route, because browsers cache 308s.
+- `vercel.json` permanently redirects (308) every extensionless path to `/`, except Vercel's own `/_vercel/*` (analytics). Switch it to `permanent: false` before adding any new route, because browsers cache 308s.
+- A `vercel.json` `source` is a path-to-regexp pattern, not a plain regex: it's already anchored at both ends, and `$` means a literal dollar sign. Until Oct 2026 the redirect ended in `$` and silently matched nothing.
 - Templates follow JSX whitespace rules (Astro 7's `compressHTML: "jsx"` default): a line break between two inline elements, or between an icon and its label, renders as nothing. Space them with flex `gap`, or write `{" "}` for a real space.
 - Astro copies HTML comments (`<!-- -->`) in a template into the page, once per render. Use `{/* */}` or a frontmatter comment for notes about the code.
 - Everything in `src/assets/` is public twice: on the site and in this public repo's history. Deleting a file later doesn't remove it from history, so only add what's meant to be published.
