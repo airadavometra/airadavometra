@@ -94,17 +94,18 @@ const { githubLink, linkedinLink, cvUrl } = Astro.props;
   const closeBtn = document.querySelector(".js-menu-close");
   const mobileLinks = document.querySelectorAll(".js-mobile-link");
 
-  const toggleMenu = (open: boolean) => {
+  const toggleMenu = (open: boolean, { restoreFocus = true } = {}) => {
     if (open) {
       menu?.classList.add("mobile-menu--open");
       overlay?.classList.add("mobile-menu-overlay--open");
       document.body.style.overflow = "hidden";
+      // Works because the menu turns visible at once (see .mobile-menu--open)
       (closeBtn as HTMLElement)?.focus();
     } else {
       menu?.classList.remove("mobile-menu--open");
       overlay?.classList.remove("mobile-menu-overlay--open");
       document.body.style.overflow = "";
-      (openBtn as HTMLElement)?.focus();
+      if (restoreFocus) (openBtn as HTMLElement)?.focus();
     }
   };
 
@@ -117,6 +118,13 @@ const { githubLink, linkedinLink, cvUrl } = Astro.props;
     );
     const first = focusables[0];
     const last = focusables[focusables.length - 1];
+
+    // Pull focus back in if it ever ends up outside the open menu
+    if (!menu.contains(document.activeElement)) {
+      first.focus();
+      e.preventDefault();
+      return;
+    }
 
     if (e.shiftKey) {
       if (document.activeElement === first) {
@@ -143,8 +151,11 @@ const { githubLink, linkedinLink, cvUrl } = Astro.props;
   window.addEventListener("keydown", handleFocusTrap);
   window.addEventListener("keydown", handleEsc);
 
+  // A link moves focus to its section, so don't send it back to the menu button
   mobileLinks.forEach((link) => {
-    link.addEventListener("click", () => toggleMenu(false));
+    link.addEventListener("click", () =>
+      toggleMenu(false, { restoreFocus: false }),
+    );
   });
 
   const updateHeader = () => {
@@ -234,9 +245,12 @@ const { githubLink, linkedinLink, cvUrl } = Astro.props;
     visibility: hidden;
   }
 
+  /* Visible at once on open, so focus can move in straight away. Closing still
+     uses the transition above, which keeps it visible until it has slid out. */
   .mobile-menu--open {
     left: 0;
     visibility: visible;
+    transition: left var(--transition-menu);
   }
 
   .close-button {

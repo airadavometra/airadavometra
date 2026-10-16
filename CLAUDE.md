@@ -7,7 +7,8 @@ Daria Artemova's one-page portfolio. All copy and images live in the repo; the s
 The repo root is the Astro 5 site (npm): one page (`src/pages/index.astro`) built from section components in `src/components/`.
 
 - `src/content/`: the content, as Markdown files. Their schemas are in `src/content.config.ts`.
-- `src/assets/`: the images the content points to, plus the favicon, link-preview image and CV.
+- `src/assets/`: the images the content points to, plus the link-preview image and CV.
+- `public/`: files served as-is at fixed URLs, including the icons (`favicon.svg`, `favicon.ico`, `apple-touch-icon.png`).
 - `src/icons/`: custom SVG icons for anything no icon pack has (empty for now).
 - `scripts/`: screenshot, diff and accessibility tooling (see the `verify-ui` skill).
 
@@ -35,7 +36,8 @@ Content lives in Markdown files in `src/content/`: frontmatter for the fields, a
 - `src/content.config.ts` holds the schemas. A missing field, bad URL or email, missing image or unknown placement fails the build and names the file.
 - `order` sets the position in the list, from 1. A manga strip's `placement` is `after-about`, `after-experience` or `after-projects`.
 - Image paths in frontmatter are relative to the Markdown file (for example `../../assets/projects/x.png`). Commit the PNG/JPG original; Astro generates the resized AVIF/WebP at build time.
-- The favicon, link-preview image (1200×630) and CV (`daria-artemova-cv.pdf`) are fixed files in `src/assets/`, imported by `Layout.astro` and `index.astro`. Replace a file to update it. The CV's URL is hashed, so it changes with each version.
+- The link-preview image (1200×630) and CV (`daria-artemova-cv.pdf`) are fixed files in `src/assets/`, imported by `Layout.astro` and `index.astro`. Replace a file to update it. The CV's URL is hashed, so it changes with each version.
+- The icon is ダ in Noto Sans JP Bold, ink `--black`, on a `--blue` circle. `public/favicon.svg` is the source (the letter is an outline, so no font is needed); `favicon.ico` (16/32/48px) and `apple-touch-icon.png` (180px, the circle on `--white`, since iOS needs an opaque square) are rendered from it.
 - `markdown.smartypants` is off, so text renders exactly as typed (no automatic curly quotes or dashes).
 - Keep content (copy, links, images) in `src/content/`. Components hold only interface text such as nav labels and button text.
 - A content change goes live with the next deploy, which Vercel runs on every push to `main`.
