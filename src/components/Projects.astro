@@ -1,14 +1,20 @@
 ---
 import { Icon } from "astro-icon/components";
+import { render, type CollectionEntry } from "astro:content";
 import ResponsiveImage from "./ResponsiveImage.astro";
-import type { Project } from "../data/projects";
 import WidthContainer from "./WidthContainer.astro";
 
 interface Props {
-  projects: Project[];
+  projects: CollectionEntry<"projects">[];
 }
 
-const { projects } = Astro.props;
+// The description is each file's Markdown body
+const items = await Promise.all(
+  Astro.props.projects.map(async (entry) => ({
+    ...entry.data,
+    Description: (await render(entry)).Content,
+  })),
+);
 ---
 
 <WidthContainer>
@@ -16,8 +22,8 @@ const { projects } = Astro.props;
     <h2 class="title">Pet projects</h2>
 
     <ul class="projects-list">
-      {projects.map((project) => {
-        const { screenshots } = project;
+      {items.map((project) => {
+        const { screenshots, Description } = project;
 
         return (
           <li class="project-item">
@@ -83,7 +89,9 @@ const { projects } = Astro.props;
               <span class="project-year">{project.year}</span>
             </div>
 
-            <p class="project-description">{project.description}</p>
+            <div class="project-description">
+              <Description />
+            </div>
 
             {project.tags.length > 0 && (
               <ul class="project-tags">

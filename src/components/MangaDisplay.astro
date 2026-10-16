@@ -1,10 +1,10 @@
 ---
+import type { CollectionEntry } from "astro:content";
 import ResponsiveImage from "./ResponsiveImage.astro";
-import type { Manga } from "../data/manga";
 import WidthContainer from "./WidthContainer.astro";
 
 interface Props {
-  manga: Manga;
+  manga: CollectionEntry<"manga">["data"];
 }
 
 const { manga } = Astro.props;

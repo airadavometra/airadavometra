@@ -5,14 +5,20 @@ import openSansLatin from "@fontsource-variable/open-sans/files/open-sans-latin-
 import "../styles/reset.css";
 import "../styles/global.css";
 import Analytics from "@vercel/analytics/astro";
-import { settings } from "../data/settings";
+import favicon from "../assets/favicon.png";
+import shareImage from "../assets/share.png";
 
-const title = settings.siteTitle;
-const metaDescription = settings.metaDescription;
+interface Props {
+  title: string;
+  /** The search result snippet and link-preview text */
+  description: string;
+}
+
+const { title, description: metaDescription } = Astro.props;
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site).href;
-const faviconUrl = settings.favicon.src;
-// Link previews need an absolute URL
-const shareImageUrl = new URL(settings.shareImage.src, Astro.site).href;
+const faviconUrl = favicon.src;
+// Link previews need an absolute URL. The image is 1200×630.
+const shareImageUrl = new URL(shareImage.src, Astro.site).href;
 ---
 
 <!doctype html>

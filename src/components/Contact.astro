@@ -74,8 +74,12 @@ const { title, email, linkedinLink, image } = Astro.props;
     z-index: -1;
   }
 
+  /* The art sits behind the text, so on narrower screens it shrinks with the
+     space beside the text column (about 23rem). It's 10% bigger than that
+     space: its top-left corner is empty (the drawing is round), so the box can
+     reach into the text column without the drawing touching the text. */
   .contact-image {
-    max-width: 800px;
+    max-width: min(800px, calc((100% - 23rem) * 1.1));
     margin-left: auto;
   }
 
@@ -161,9 +165,11 @@ const { title, email, linkedinLink, image } = Astro.props;
       gap: var(--spacing-32);
     }
 
+    /* It's pinned to the page bottom, so a wider screen would push it up
+       behind the links: stop growing at about large-phone size */
     .contact-image {
       margin-right: calc(var(--spacing-16) * -1);
-      max-width: 100%;
+      max-width: min(100%, 30rem);
     }
 
     .info-wrapper {

@@ -1,12 +1,13 @@
 ---
+import type { CollectionEntry } from "astro:content";
 import ResponsiveImage from "./ResponsiveImage.astro";
-import type { home } from "../data/home";
 import WidthContainer from "./WidthContainer.astro";
 import DownloadCvButton from "./DownloadCvButton.astro";
 
-type Props = (typeof home)["about"] & { cvUrl: string };
+// The About paragraphs come in through the default slot
+type Props = CollectionEntry<"home">["data"]["about"] & { cvUrl: string };
 
-const { image, title, subtitle, description, cvUrl } = Astro.props;
+const { image, title, subtitle, cvUrl } = Astro.props;
 ---
 
 <WidthContainer>
@@ -24,9 +25,9 @@ const { image, title, subtitle, description, cvUrl } = Astro.props;
         <h2 class="title">{title}</h2>
         <p class="subtitle">{subtitle}</p>
       </div>
-      {description.map((paragraph) => (
-        <p class="description">{paragraph}</p>
-      ))}
+      <div class="description">
+        <slot />
+      </div>
       <div class="cta-button-wrapper">
         <DownloadCvButton cvUrl={cvUrl} location="about" />
       </div>
@@ -67,7 +68,11 @@ const { image, title, subtitle, description, cvUrl } = Astro.props;
     font-size: var(--font-size-16-20);
     font-weight: 600;
   }
+  /* Same spacing between paragraphs as between the blocks around them */
   .description {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-32);
     font-size: var(--font-size-16-20);
     font-weight: 400;
   }

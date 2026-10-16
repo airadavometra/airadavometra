@@ -6,8 +6,9 @@ Daria Artemova's one-page portfolio. All copy and images live in the repo; the s
 
 The repo root is the Astro 5 site (npm): one page (`src/pages/index.astro`) built from section components in `src/components/`.
 
-- `src/data/`: the content, as typed TypeScript modules.
-- `src/assets/`: the images and CV that the content imports.
+- `src/content/`: the content, as Markdown files. Their schemas are in `src/content.config.ts`.
+- `src/assets/`: the images the content points to, plus the favicon, link-preview image and CV.
+- `src/icons/`: custom SVG icons for anything no icon pack has (empty for now).
 - `scripts/`: screenshot, diff and accessibility tooling (see the `verify-ui` skill).
 
 ## Commands
@@ -22,22 +23,21 @@ Run from the repo root:
 
 ## Content
 
-Content lives in `src/data/`, one module per area. `index.astro` imports it and passes typed props down; only `Layout.astro` imports `settings` itself.
+Content lives in Markdown files in `src/content/`: frontmatter for the fields, and the body for the long text (a blank line starts a new paragraph). `index.astro` loads it with `getEntry`/`getCollection` and passes it down.
 
-| Module        | Holds                                                                                |
-| ------------- | ------------------------------------------------------------------------------------ |
-| `settings.ts` | `<head>`: tab title, meta description, favicon, link-preview image (1200×630)        |
-| `home.ts`     | Page title ("Name — Role"), hero, About, CV, experience, profile links, email, Contact |
-| `skills.ts`   | Skill names and their icon-pack icons                                                |
-| `projects.ts` | Pet projects; the first screenshot is the cover                                      |
-| `manga.ts`    | Manga strips, each with four panels and their alt text                               |
+| File                      | Frontmatter                                                                     | Body                 |
+| ------------------------- | ------------------------------------------------------------------------------- | -------------------- |
+| `home.md`                 | Title ("Name — Role"), meta description, hero, About heading, skills, links, Contact | The About paragraphs |
+| `experience/<job>.md`     | Title, duration, `order`                                                        | The description      |
+| `projects/<project>.md`   | Title, year, optional link, tags, screenshots (first is the cover), `order`     | The description      |
+| `manga/<strip>.md`        | Title, `placement`, panels with alt text                                        | (none)               |
 
-- Files go in `src/assets/` and are imported statically, so a missing or misspelled file fails the build.
-  - Images: commit the PNG/JPG original. Astro generates the resized AVIF/WebP at build time.
-  - CV: `daria-artemova-cv.pdf`, imported with `?url`, so its URL is hashed and changes with each new version.
-- Multi-paragraph text is a `string[]`, one string per paragraph.
-- Manga strips are placed in `index.astro` between sections: after About, after Experience & skills, and optionally a third after Pet projects.
-- Keep content (copy, links, images) in `src/data/`. Components hold only interface text such as nav labels and button text.
+- `src/content.config.ts` holds the schemas. A missing field, bad URL or email, missing image or unknown placement fails the build and names the file.
+- `order` sets the position in the list, from 1. A manga strip's `placement` is `after-about`, `after-experience` or `after-projects`.
+- Image paths in frontmatter are relative to the Markdown file (for example `../../assets/projects/x.png`). Commit the PNG/JPG original; Astro generates the resized AVIF/WebP at build time.
+- The favicon, link-preview image (1200×630) and CV (`daria-artemova-cv.pdf`) are fixed files in `src/assets/`, imported by `Layout.astro` and `index.astro`. Replace a file to update it. The CV's URL is hashed, so it changes with each version.
+- `markdown.smartypants` is off, so text renders exactly as typed (no automatic curly quotes or dashes).
+- Keep content (copy, links, images) in `src/content/`. Components hold only interface text such as nav labels and button text.
 - A content change goes live with the next deploy, which Vercel runs on every push to `main`.
 
 ## Conventions
@@ -54,7 +54,7 @@ Content lives in `src/data/`, one module per area. `index.astro` imports it and 
   - UI icons are [Phosphor](https://phosphoricons.com), regular weight (`ph:`).
   - Skill logos are Simple Icons (`simple-icons:`). Devicon (`devicon-plain:`) and IcoMoon (`icomoon-free:`) fill the two gaps, Zustand and Accessibility.
   - Icons draw in `currentColor`, so colour them with `color`, not `fill`. Always pass `aria-hidden="true"`; the visible label or `aria-label` carries the meaning.
-  - A new pack is `npm install @iconify-json/<pack>`.
+  - A new pack is `npm install @iconify-json/<pack>`. For an icon no pack has, add the SVG to `src/icons/` and use its file name (`name="my-icon"`).
 - Analytics is Vercel Web Analytics. To track a click, add `data-track="event_name"` and optional `data-track-<prop>="value"` to the element; a single listener in `src/lib/analytics.ts` sends it. Never send visitor data.
 - The design is light-only on purpose: two full-page texture overlays (`body::before`/`::after`) multiply over everything.
 

@@ -1,6 +1,6 @@
 ---
 name: verify-ui
-description: Build, run and check the portfolio site visually and for accessibility. Use after any change to the site's components, styles or content (src/data, src/assets), when implementing a design frame, or when asked to screenshot, run or check the site.
+description: Build, run and check the portfolio site visually and for accessibility. Use after any change to the site's components, styles or content (src/content, src/assets), when implementing a design frame, or when asked to screenshot, run or check the site.
 ---
 
 # Verify UI changes

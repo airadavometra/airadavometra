@@ -1,16 +1,25 @@
 ---
 import { Icon } from "astro-icon/components";
-import type { ExperienceItem } from "../data/home";
-import type { Skill } from "../data/skills";
+import { render, type CollectionEntry } from "astro:content";
 import WidthContainer from "./WidthContainer.astro";
 
+type Home = CollectionEntry<"home">["data"];
+
 interface Props {
-  experience: ExperienceItem[];
-  experienceYears: number;
-  skills: Skill[];
+  experience: CollectionEntry<"experience">[];
+  experienceYears: Home["experienceYears"];
+  skills: Home["skills"];
 }
 
-const { experience, experienceYears, skills } = Astro.props;
+const { experienceYears, skills } = Astro.props;
+
+// The description is each file's Markdown body
+const experience = await Promise.all(
+  Astro.props.experience.map(async (entry) => ({
+    ...entry.data,
+    Description: (await render(entry)).Content,
+  })),
+);
 ---
 
 <WidthContainer>
@@ -22,15 +31,13 @@ const { experience, experienceYears, skills } = Astro.props;
       </div>
 
       <div class="experience-list">
-        {experience.map((item) => (
+        {experience.map(({ duration, title, Description }) => (
           <>
-            <span class="experience-duration">{item.duration}</span>
+            <span class="experience-duration">{duration}</span>
             <div class="experience-content">
-              <h3 class="experience-job-title">{item.title}</h3>
+              <h3 class="experience-job-title">{title}</h3>
               <div class="experience-description">
-                {item.description.map((p) => (
-                  <p>{p}</p>
-                ))}
+                <Description />
               </div>
             </div>
           </>
