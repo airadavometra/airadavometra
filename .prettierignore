@@ -1,0 +1,7 @@
+dist
+.astro
+package-lock.json
+
+# Formatting covers the site code, not docs or Claude Code config
+*.md
+.claude/

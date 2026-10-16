@@ -1,5 +1,5 @@
 ---
-import DownloadIcon from "./icons/Download.astro";
+import { Icon } from "astro-icon/components";
 
 interface Props {
   cvUrl: string;
@@ -17,7 +17,7 @@ const { cvUrl, location } = Astro.props;
   data-track="cv_download"
   data-track-location={location}
 >
-  <DownloadIcon class="icon" />
+  <Icon name="ph:download-simple" class="icon" aria-hidden="true" />
   <slot>Download CV</slot>
 </a>
 

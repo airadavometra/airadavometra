@@ -1,5 +1,5 @@
 {
-  "name": "frontend-astro",
+  "name": "airadavometra",
   "type": "module",
   "version": "0.0.1",
   "scripts": {
@@ -15,8 +15,13 @@
   },
   "dependencies": {
     "@fontsource-variable/open-sans": "^5.3.0",
+    "@iconify-json/devicon-plain": "^1.2.62",
+    "@iconify-json/icomoon-free": "^1.2.1",
+    "@iconify-json/ph": "^1.2.2",
+    "@iconify-json/simple-icons": "^1.2.100",
     "@vercel/analytics": "^1.6.1",
-    "astro": "^5.17.1"
+    "astro": "^5.17.1",
+    "astro-icon": "^1.2.0"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",

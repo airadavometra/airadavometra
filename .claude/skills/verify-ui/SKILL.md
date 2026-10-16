@@ -1,11 +1,11 @@
 ---
 name: verify-ui
-description: Build, run and check the portfolio site visually and for accessibility. Use after any change to frontend-astro components, styles or content (src/data, src/assets), when implementing a design frame, or when asked to screenshot, run or check the site.
+description: Build, run and check the portfolio site visually and for accessibility. Use after any change to the site's components, styles or content (src/data, src/assets), when implementing a design frame, or when asked to screenshot, run or check the site.
 ---
 
 # Verify UI changes
 
-All commands run in `frontend-astro/`. Keep screenshots and reports in the scratchpad, never in the repo.
+All commands run from the repo root. Keep screenshots and reports in the scratchpad, never in the repo.
 
 ## 1. Build and serve
 

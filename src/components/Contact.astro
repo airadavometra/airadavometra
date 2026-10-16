@@ -1,8 +1,7 @@
 ---
+import { Icon } from "astro-icon/components";
 import ResponsiveImage from "./ResponsiveImage.astro";
 import WidthContainer from "./WidthContainer.astro";
-import ExternalLinkIcon from "./icons/ExternalLink.astro";
-import CopyIcon from "./icons/Copy.astro";
 
 interface Props {
   title: string;
@@ -29,7 +28,7 @@ const { title, email, linkedinLink, image } = Astro.props;
             <span class="email-text js-email-text">{email}</span>
             <span class="copied-text js-copied-text">Email was copied!</span>
           </span>
-          <CopyIcon class="icon" />
+          <Icon name="ph:copy" class="icon" aria-hidden="true" />
         </button>
 
         <a
@@ -41,7 +40,7 @@ const { title, email, linkedinLink, image } = Astro.props;
           data-track-location="contact"
         >
           <span>LinkedIn</span>
-          <ExternalLinkIcon class="icon" />
+          <Icon name="ph:arrow-up-right" class="icon" aria-hidden="true" />
         </a>
       </div>
     </div>

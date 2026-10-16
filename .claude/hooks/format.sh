@@ -6,7 +6,7 @@ file=$(jq -r '.tool_response.filePath // .tool_input.file_path // empty')
 
 root="${CLAUDE_PROJECT_DIR:-$(git rev-parse --show-toplevel)}"
 case "$file" in
-  "$root"/frontend-astro/*) pkg="$root/frontend-astro" ;;
+  "$root"/*) ;;
   *) exit 0 ;;
 esac
 
@@ -15,4 +15,4 @@ case "$file" in
   *) exit 0 ;;
 esac
 
-cd "$pkg" && ./node_modules/.bin/prettier --write --ignore-unknown "$file" > /dev/null
+cd "$root" && ./node_modules/.bin/prettier --write --ignore-unknown "$file" > /dev/null

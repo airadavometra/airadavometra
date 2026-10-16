@@ -1,8 +1,8 @@
 ---
+import { Icon } from "astro-icon/components";
 import ResponsiveImage from "./ResponsiveImage.astro";
 import type { Project } from "../data/projects";
 import WidthContainer from "./WidthContainer.astro";
-import ExternalLinkIcon from "./icons/ExternalLink.astro";
 
 interface Props {
   projects: Project[];
@@ -70,7 +70,11 @@ const { projects } = Astro.props;
                     data-track-project={project.title}
                   >
                     <span>{project.title}</span>
-                    <ExternalLinkIcon class="icon" />
+                    <Icon
+                      name="ph:arrow-up-right"
+                      class="icon"
+                      aria-hidden="true"
+                    />
                   </a>
                 ) : (
                   project.title

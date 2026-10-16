@@ -1,6 +1,6 @@
 ---
+import { Icon } from "astro-icon/components";
 import WidthContainer from "./WidthContainer.astro";
-import Heart from "./icons/Heart.astro";
 
 // The site is rebuilt on every push, so the build year is current.
 const year = new Date().getFullYear();
@@ -10,7 +10,7 @@ const year = new Date().getFullYear();
   <WidthContainer>
     <div class="footer-content">
       <p class="made-with">
-        Made with <Heart class="heart-icon" />
+        Made with <Icon name="ph:heart" class="heart-icon" aria-hidden="true" />
         <span class="visually-hidden">love</span> by Daria
       </p>
       <p class="year">{year}</p>

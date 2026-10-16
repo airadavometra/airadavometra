@@ -1,4 +1,5 @@
 ---
+import { Icon } from "astro-icon/components";
 import type { ExperienceItem } from "../data/home";
 import type { Skill } from "../data/skills";
 import WidthContainer from "./WidthContainer.astro";
@@ -41,11 +42,11 @@ const { experience, experienceYears, skills } = Astro.props;
       <h2 class="section-title">Skills</h2>
 
       <ul class="skills-grid">
-        {skills.map(({ name, icon: Icon }) => (
+        {skills.map(({ name, icon }) => (
           <li class="skill-item">
             {/* Inlined so CSS can tint it with the brand blue */}
             <div class="skill-icon">
-              <Icon aria-hidden="true" focusable="false" />
+              <Icon name={icon} aria-hidden="true" />
             </div>
             <span class="skill-name">{name}</span>
           </li>
@@ -137,7 +138,8 @@ const { experience, experienceYears, skills } = Astro.props;
   .skill-icon :global(svg) {
     width: 100%;
     height: 100%;
-    fill: var(--blue);
+    /* Pack icons are drawn in currentColor */
+    color: var(--blue);
   }
 
   .skills-note {

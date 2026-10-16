@@ -1,9 +1,6 @@
 ---
+import { Icon } from "astro-icon/components";
 import WidthContainer from "./WidthContainer.astro";
-import MenuIcon from "./icons/Menu.astro";
-import CloseIcon from "./icons/Close.astro";
-import LinkedinIcon from "./icons/Linkedin.astro";
-import GithubIcon from "./icons/Github.astro";
 import DownloadCvButton from "./DownloadCvButton.astro";
 
 interface Props {
@@ -35,13 +32,13 @@ const { githubLink, linkedinLink, cvUrl } = Astro.props;
 
       <div class="mobile-only">
         <button class="menu-button js-menu-open" aria-label="Open menu">
-          <MenuIcon class="icon" />
+          <Icon name="ph:list" class="icon" aria-hidden="true" />
         </button>
       </div>
 
       <div class="mobile-menu js-mobile-menu">
         <button class="close-button js-menu-close" aria-label="Close menu">
-          <CloseIcon class="icon" />
+          <Icon name="ph:x" class="icon" aria-hidden="true" />
         </button>
         <nav class="mobile-navigation">
           <a href="#experience" class="nav-link js-mobile-link">
@@ -70,7 +67,7 @@ const { githubLink, linkedinLink, cvUrl } = Astro.props;
           data-track="github_click"
           data-track-location="header"
         >
-          <GithubIcon class="icon" />
+          <Icon name="ph:github-logo" class="icon" aria-hidden="true" />
         </a>
         <a
           href={linkedinLink}
@@ -81,7 +78,7 @@ const { githubLink, linkedinLink, cvUrl } = Astro.props;
           data-track="linkedin_click"
           data-track-location="header"
         >
-          <LinkedinIcon class="icon" />
+          <Icon name="ph:linkedin-logo" class="icon" aria-hidden="true" />
         </a>
         <DownloadCvButton cvUrl={cvUrl} location="header" />
       </div>

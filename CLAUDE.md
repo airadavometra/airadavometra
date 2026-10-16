@@ -4,13 +4,15 @@ Daria Artemova's one-page portfolio. All copy and images live in the repo; the s
 
 ## Layout
 
-- `frontend-astro/`: Astro 5 site, npm. One page (`src/pages/index.astro`) built from section components in `src/components/`.
-  - `src/data/`: the content, as typed TypeScript modules.
-  - `src/assets/`: the images, skill icons and CV that the content imports.
+The repo root is the Astro 5 site (npm): one page (`src/pages/index.astro`) built from section components in `src/components/`.
+
+- `src/data/`: the content, as typed TypeScript modules.
+- `src/assets/`: the images and CV that the content imports.
+- `scripts/`: screenshot, diff and accessibility tooling (see the `verify-ui` skill).
 
 ## Commands
 
-Frontend (run in `frontend-astro/`):
+Run from the repo root:
 
 - `npm run dev`: dev server on http://localhost:4321
 - `npm run build`: `astro check` (types) then `astro build`. Vercel runs this, so type errors fail the deploy.
@@ -26,13 +28,12 @@ Content lives in `src/data/`, one module per area. `index.astro` imports it and 
 | ------------- | ------------------------------------------------------------------------------------ |
 | `settings.ts` | `<head>`: tab title, meta description, favicon, link-preview image (1200×630)        |
 | `home.ts`     | Page title ("Name — Role"), hero, About, CV, experience, profile links, email, Contact |
-| `skills.ts`   | Skill names and their icons                                                          |
+| `skills.ts`   | Skill names and their icon-pack icons                                                |
 | `projects.ts` | Pet projects; the first screenshot is the cover                                      |
 | `manga.ts`    | Manga strips, each with four panels and their alt text                               |
 
 - Files go in `src/assets/` and are imported statically, so a missing or misspelled file fails the build.
   - Images: commit the PNG/JPG original. Astro generates the resized AVIF/WebP at build time.
-  - Skill icons: single-colour SVGs imported as Astro SVG components; CSS fills them with the brand blue.
   - CV: `daria-artemova-cv.pdf`, imported with `?url`, so its URL is hashed and changes with each new version.
 - Multi-paragraph text is a `string[]`, one string per paragraph.
 - Manga strips are placed in `index.astro` between sections: after About, after Experience & skills, and optionally a third after Pet projects.
@@ -49,13 +50,17 @@ Content lives in `src/data/`, one module per area. `index.astro` imports it and 
   - The `<picture>` wrapper is `display: contents` (`global.css`), so style the image through the `class` you pass, which lands on the `<img>`.
 - The font is Open Sans Variable, self-hosted through `@fontsource-variable/open-sans` and imported in `Layout.astro`, which also preloads the Latin file. Don't add Google Fonts links.
 - Static assets in `public/` stay small: prefer WebP (the ink texture is lossless WebP). Content files belong in `src/assets/`, not `public/`, so Astro optimises and hashes them. CSS is inlined into the HTML (`build.inlineStylesheets: "always"`).
-- Icons are `.astro` SVG components in `src/components/icons/`, using `fill="currentColor"` and `aria-hidden="true"`. Skill icons are plain SVG files in `src/assets/skills/`, rendered with `aria-hidden="true"`.
+- Icons come from icon packs through `astro-icon`: `<Icon name="ph:download-simple" class="icon" aria-hidden="true" />`. It inlines the SVG at build time, and an unknown name fails the build. Browse names at https://icon-sets.iconify.design.
+  - UI icons are [Phosphor](https://phosphoricons.com), regular weight (`ph:`).
+  - Skill logos are Simple Icons (`simple-icons:`). Devicon (`devicon-plain:`) and IcoMoon (`icomoon-free:`) fill the two gaps, Zustand and Accessibility.
+  - Icons draw in `currentColor`, so colour them with `color`, not `fill`. Always pass `aria-hidden="true"`; the visible label or `aria-label` carries the meaning.
+  - A new pack is `npm install @iconify-json/<pack>`.
 - Analytics is Vercel Web Analytics. To track a click, add `data-track="event_name"` and optional `data-track-<prop>="value"` to the element; a single listener in `src/lib/analytics.ts` sends it. Never send visitor data.
 - The design is light-only on purpose: two full-page texture overlays (`body::before`/`::after`) multiply over everything.
 
 ## Definition of done
 
-1. `npm run build` passes in `frontend-astro/`.
+1. `npm run build` passes.
 2. Screenshots at 1440×900 and 390×844 look right: compared with the previous state, or with the design frame when implementing a design. See the `verify-ui` skill.
 3. `npm run a11y` reports no new violations, and a keyboard pass works (visible focus, logical order, the mobile menu traps focus and closes on Esc).
 
