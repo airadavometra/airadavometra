@@ -5,7 +5,11 @@ link: https://chromewebstore.google.com/detail/imohhjdbajiihdogpnphgbocfodbofip
 tags: [Plasmo, TypeScript, React, TailwindCSS]
 # The first screenshot is the cover
 screenshots:
-  - ../../assets/projects/visual-impairments-simulator.png
+  - ../../assets/projects/visual-impairments-simulator-1.png
+  - ../../assets/projects/visual-impairments-simulator-2.png
+  - ../../assets/projects/visual-impairments-simulator-3.png
+  - ../../assets/projects/visual-impairments-simulator-4.png
+  - ../../assets/projects/visual-impairments-simulator-5.png
 order: 3
 ---
 
