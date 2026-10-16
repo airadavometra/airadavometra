@@ -1,0 +1,37 @@
+---
+// Every raster image on the page goes through this. It renders a resized AVIF
+// with a WebP fallback, plus intrinsic width/height so the browser reserves
+// space before it loads (no layout shift). The <picture> is display: contents
+// (global.css), so the <img> is what the layout sees. Lazy-loaded unless
+// `priority` is set.
+import { Picture } from "astro:assets";
+import type { HTMLAttributes } from "astro/types";
+
+interface Props extends Omit<
+  HTMLAttributes<"img">,
+  "src" | "srcset" | "width" | "height"
+> {
+  src: ImageMetadata;
+  /** Candidate widths in px. The image's own width is always included and nothing wider is generated. */
+  widths: number[];
+  /** The `sizes` attribute: how wide the image is rendered at each breakpoint. */
+  sizes: string;
+  alt: string;
+  /** Only for the LCP image: loads eagerly with fetchpriority="high". */
+  priority?: boolean;
+}
+
+const { src, widths, ...attributes } = Astro.props;
+
+// Astro only adds the full width when a requested width is larger than the
+// image, so add it here: high-density screens then get the sharpest version.
+const candidates = [...widths.filter((width) => width < src.width), src.width];
+---
+
+<Picture
+  src={src}
+  widths={candidates}
+  formats={["avif"]}
+  fallbackFormat="webp"
+  {...attributes}
+/>

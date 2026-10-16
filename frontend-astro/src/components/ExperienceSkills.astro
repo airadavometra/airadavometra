@@ -1,23 +1,15 @@
 ---
-import type { Home } from "../lib/queries";
-import { inlineSvg } from "../lib/svg";
+import type { ExperienceItem } from "../data/home";
+import type { Skill } from "../data/skills";
 import WidthContainer from "./WidthContainer.astro";
 
 interface Props {
-  experience: Home["experience"] | undefined;
-  experienceYears: Home["experienceYears"] | undefined;
-  skills: Home["skills"] | undefined;
+  experience: ExperienceItem[];
+  experienceYears: number;
+  skills: Skill[];
 }
 
 const { experience, experienceYears, skills } = Astro.props;
-
-// Icons are inlined at build time so CSS can tint them with the brand blue.
-const skillsWithIcons = await Promise.all(
-  (skills ?? []).map(async (skill) => ({
-    ...skill,
-    icon: skill.iconUrl ? await inlineSvg(skill.iconUrl) : null,
-  })),
-);
 ---
 
 <WidthContainer>
@@ -25,24 +17,20 @@ const skillsWithIcons = await Promise.all(
     <section id="experience" class="experience-section">
       <div class="experience-header">
         <h2 class="section-title">Experience</h2>
-        {experienceYears && (
-          <span class="experience-years">{experienceYears}+ years</span>
-        )}
+        <span class="experience-years">{experienceYears}+ years</span>
       </div>
 
       <div class="experience-list">
-        {experience?.map((item) => (
+        {experience.map((item) => (
           <>
             <span class="experience-duration">{item.duration}</span>
             <div class="experience-content">
               <h3 class="experience-job-title">{item.title}</h3>
-              {item.description && (
-                <div class="experience-description">
-                  {item.description.split("\n").map((p) => (
-                    <p>{p}</p>
-                  ))}
-                </div>
-              )}
+              <div class="experience-description">
+                {item.description.map((p) => (
+                  <p>{p}</p>
+                ))}
+              </div>
             </div>
           </>
         ))}
@@ -53,10 +41,13 @@ const skillsWithIcons = await Promise.all(
       <h2 class="section-title">Skills</h2>
 
       <ul class="skills-grid">
-        {skillsWithIcons.map((skill) => (
+        {skills.map(({ name, icon: Icon }) => (
           <li class="skill-item">
-            {skill.icon && <div class="skill-icon" set:html={skill.icon} />}
-            <span class="skill-name">{skill.name}</span>
+            {/* Inlined so CSS can tint it with the brand blue */}
+            <div class="skill-icon">
+              <Icon aria-hidden="true" focusable="false" />
+            </div>
+            <span class="skill-name">{name}</span>
           </li>
         ))}
       </ul>

@@ -1,45 +1,32 @@
 ---
-import { sanityImage } from "../lib/image";
-import type { Home } from "../lib/queries";
+import ResponsiveImage from "./ResponsiveImage.astro";
+import type { home } from "../data/home";
 import WidthContainer from "./WidthContainer.astro";
 import DownloadCvButton from "./DownloadCvButton.astro";
 
-interface Props {
-  image: Home["aboutMeImage"] | undefined;
-  title: Home["aboutMeTitle"] | undefined;
-  subtitle: Home["aboutMeSubtitle"] | undefined;
-  description: Home["aboutMeDescription"] | undefined;
-  cvUrl: Home["cvUrl"] | undefined;
-}
+type Props = (typeof home)["about"] & { cvUrl: string };
 
 const { image, title, subtitle, description, cvUrl } = Astro.props;
 ---
 
 <WidthContainer>
   <section id="about" class="about-section">
-    {image && (
-      <img
-        class="image"
-        {...sanityImage(image, {
-          widths: [400, 500, 640, 800, 1000],
-          sizes: "(max-width: 48rem) calc(100vw - 32px), 500px",
-        })}
-        alt=""
-        loading="lazy"
-        decoding="async"
-      />
-    )}
+    <ResponsiveImage
+      class="image"
+      src={image}
+      widths={[400, 500, 640, 800, 1000]}
+      sizes="(max-width: 48rem) calc(100vw - 32px), 500px"
+      alt=""
+    />
 
     <div class="content-wrapper">
       <div class="title-wrapper">
-        {title && <h2 class="title">{title}</h2>}
-        {subtitle && <p class="subtitle">{subtitle}</p>}
+        <h2 class="title">{title}</h2>
+        <p class="subtitle">{subtitle}</p>
       </div>
-      {description
-        ?.split("\n")
-        .map(
-          (paragraph) => paragraph && <p class="description">{paragraph}</p>,
-        )}
+      {description.map((paragraph) => (
+        <p class="description">{paragraph}</p>
+      ))}
       <div class="cta-button-wrapper">
         <DownloadCvButton cvUrl={cvUrl} location="about" />
       </div>

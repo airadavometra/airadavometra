@@ -8,27 +8,27 @@ import ExperienceSkills from "../components/ExperienceSkills.astro";
 import Projects from "../components/Projects.astro";
 import MangaDisplay from "../components/MangaDisplay.astro";
 import Contact from "../components/Contact.astro";
-import { client } from "../lib/sanity";
-import { pageQuery } from "../lib/queries";
-
-const { settings, home } = await client.fetch(pageQuery);
+import { home } from "../data/home";
+import { skills } from "../data/skills";
+import { projects } from "../data/projects";
+import { coldTea, stupidCode } from "../data/manga";
 
 // Structured data for search engines: who the page is about, and which
 // profiles are the same person. The title reads "Name — Role".
-const [name, jobTitle] = (home?.title ?? "").split(" — ");
+const [name, jobTitle] = home.title.split(" — ");
 const person = {
   "@context": "https://schema.org",
   "@type": "Person",
-  name: name || "Daria Artemova",
+  name,
   ...(jobTitle && { jobTitle }),
   url: Astro.site?.href,
-  sameAs: [home?.githubLink, home?.linkedinLink].filter(Boolean),
+  sameAs: [home.githubLink, home.linkedinLink],
 };
-// Escape "<" so CMS text can never close the script tag early
+// Escape "<" so no text can ever close the script tag early
 const personJson = JSON.stringify(person).replace(/</g, "\\u003c");
 ---
 
-<Layout settings={settings}>
+<Layout>
   <script
     is:inline
     type="application/ld+json"
@@ -36,41 +36,35 @@ const personJson = JSON.stringify(person).replace(/</g, "\\u003c");
     set:html={personJson}
   />
   <Header
-    githubLink={home?.githubLink}
-    linkedinLink={home?.linkedinLink}
-    cvUrl={home?.cvUrl}
+    githubLink={home.githubLink}
+    linkedinLink={home.linkedinLink}
+    cvUrl={home.cvUrl}
   />
 
   <main class="main">
-    <Hero title={home?.title} image={home?.heroImage} />
+    <Hero title={home.title} image={home.heroImage} />
 
-    <About
-      image={home?.aboutMeImage}
-      title={home?.aboutMeTitle}
-      subtitle={home?.aboutMeSubtitle}
-      description={home?.aboutMeDescription}
-      cvUrl={home?.cvUrl}
-    />
+    <About {...home.about} cvUrl={home.cvUrl} />
 
-    <MangaDisplay manga={home?.featuredManga1} />
+    {/* Manga strips sit between sections: after About, after Experience &
+    skills, and (when there's a third) after Pet projects */}
+    <MangaDisplay manga={coldTea} />
 
     <ExperienceSkills
-      experience={home?.experience}
-      experienceYears={home?.experienceYears}
-      skills={home?.skills}
+      experience={home.experience}
+      experienceYears={home.experienceYears}
+      skills={skills}
     />
 
-    <MangaDisplay manga={home?.featuredManga2} />
+    <MangaDisplay manga={stupidCode} />
 
-    <Projects projects={home?.projects} />
-
-    <MangaDisplay manga={home?.featuredManga3} />
+    <Projects projects={projects} />
 
     <Contact
-      title={home?.contactSectionTitle}
-      email={home?.email}
-      linkedinLink={home?.linkedinLink}
-      image={home?.contactSectionImage}
+      title={home.contact.title}
+      email={home.email}
+      linkedinLink={home.linkedinLink}
+      image={home.contact.image}
     />
   </main>
   <Footer />

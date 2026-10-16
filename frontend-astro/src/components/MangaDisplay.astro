@@ -1,18 +1,13 @@
 ---
-import { sanityImage } from "../lib/image";
-import type { Manga } from "../lib/queries";
+import ResponsiveImage from "./ResponsiveImage.astro";
+import type { Manga } from "../data/manga";
 import WidthContainer from "./WidthContainer.astro";
 
 interface Props {
-  manga: Manga | null | undefined;
+  manga: Manga;
 }
 
 const { manga } = Astro.props;
-
-// An empty slot in the CMS renders nothing
-if (!manga?.title || !manga.images?.length) {
-  return null;
-}
 ---
 
 <div class="manga-wrapper">
@@ -21,17 +16,13 @@ if (!manga?.title || !manga.images?.length) {
       <h2 class="title visually-hidden">Manga panel: {manga.title}</h2>
 
       <div class="images-container">
-        {manga.images.map((image) => (
-          <img
-            {...sanityImage(image, {
-              widths: [360, 540, 720, 1080],
-              sizes:
-                "(max-width: 48rem) calc(100vw - 32px), min(360px, calc((100vw - 32px) / 4))",
-            })}
-            alt={image.alt || manga.title}
+        {manga.panels.map((panel) => (
+          <ResponsiveImage
+            src={panel.src}
+            widths={[360, 540, 720, 1080]}
+            sizes="(max-width: 48rem) calc(100vw - 32px), min(360px, calc((100vw - 32px) / 4))"
+            alt={panel.alt}
             class="manga-panel"
-            loading="lazy"
-            decoding="async"
           />
         ))}
       </div>

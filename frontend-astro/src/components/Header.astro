@@ -5,12 +5,11 @@ import CloseIcon from "./icons/Close.astro";
 import LinkedinIcon from "./icons/Linkedin.astro";
 import GithubIcon from "./icons/Github.astro";
 import DownloadCvButton from "./DownloadCvButton.astro";
-import type { Home } from "../lib/queries";
 
 interface Props {
-  githubLink: Home["githubLink"] | undefined;
-  linkedinLink: Home["linkedinLink"] | undefined;
-  cvUrl: Home["cvUrl"] | undefined;
+  githubLink: string;
+  linkedinLink: string;
+  cvUrl: string;
 }
 
 const { githubLink, linkedinLink, cvUrl } = Astro.props;
@@ -62,32 +61,28 @@ const { githubLink, linkedinLink, cvUrl } = Astro.props;
       <div class="mobile-menu-overlay js-menu-overlay"></div>
 
       <div class="actions">
-        {githubLink && (
-          <a
-            href={githubLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="GitHub"
-            class="icon-link hover-scale"
-            data-track="github_click"
-            data-track-location="header"
-          >
-            <GithubIcon class="icon" />
-          </a>
-        )}
-        {linkedinLink && (
-          <a
-            href={linkedinLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="LinkedIn"
-            class="icon-link hover-scale"
-            data-track="linkedin_click"
-            data-track-location="header"
-          >
-            <LinkedinIcon class="icon" />
-          </a>
-        )}
+        <a
+          href={githubLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="GitHub"
+          class="icon-link hover-scale"
+          data-track="github_click"
+          data-track-location="header"
+        >
+          <GithubIcon class="icon" />
+        </a>
+        <a
+          href={linkedinLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="LinkedIn"
+          class="icon-link hover-scale"
+          data-track="linkedin_click"
+          data-track-location="header"
+        >
+          <LinkedinIcon class="icon" />
+        </a>
         <DownloadCvButton cvUrl={cvUrl} location="header" />
       </div>
     </div>

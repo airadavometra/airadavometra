@@ -1,11 +1,10 @@
 ---
-import { sanityImage } from "../lib/image";
-import type { Home } from "../lib/queries";
+import ResponsiveImage from "./ResponsiveImage.astro";
 import WidthContainer from "./WidthContainer.astro";
 
 interface Props {
-  title: Home["title"] | undefined;
-  image: Home["heroImage"] | undefined;
+  title: string;
+  image: ImageMetadata;
 }
 
 const { title, image } = Astro.props;
@@ -14,18 +13,16 @@ const { title, image } = Astro.props;
 <section class="hero-section">
   <h1 class="visually-hidden">{title}</h1>
 
-  {image && (
-    <WidthContainer>
-      <img
-        {...sanityImage(image, {
-          widths: [400, 600, 700, 800],
-          sizes: "(max-width: 1172px) calc(100vw - 32px), 1140px",
-        })}
-        alt=""
-        fetchpriority="high"
-      />
-    </WidthContainer>
-  )}
+  <WidthContainer>
+    {/* The LCP element: priority loads it eagerly with fetchpriority="high" */}
+    <ResponsiveImage
+      src={image}
+      widths={[400, 600, 700, 800]}
+      sizes="(max-width: 1172px) calc(100vw - 32px), 1140px"
+      alt=""
+      priority
+    />
+  </WidthContainer>
 
   <div class="blue-rectangle"></div>
 </section>

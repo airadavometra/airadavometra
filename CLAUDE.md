@@ -1,11 +1,12 @@
 # airadavometra portfolio
 
-Daria Artemova's one-page portfolio. All copy and images come from Sanity; the site is a static Astro build on Vercel.
+Daria Artemova's one-page portfolio. All copy and images live in the repo; the site is a static Astro build on Vercel.
 
 ## Layout
 
 - `frontend-astro/`: Astro 5 site, npm. One page (`src/pages/index.astro`) built from section components in `src/components/`.
-- `cms/`: Sanity Studio v5, yarn. Project `wvlqa5od`, dataset `production`. Schemas in `cms/schemaTypes/` (`homePage`, `settings`, `manga`).
+  - `src/data/`: the content, as typed TypeScript modules.
+  - `src/assets/`: the images, skill icons and CV that the content imports.
 
 ## Commands
 
@@ -17,36 +18,44 @@ Frontend (run in `frontend-astro/`):
 - `npm run format` / `npm run format:check`: Prettier with `prettier-plugin-astro`
 - `npm run screenshot -- --out <dir>`, `npm run a11y`, `node scripts/diff.mjs <a> <b>`: see the `verify-ui` skill
 
-CMS (run in `cms/`): `npm run dev` (Studio on :3333), `npm run typegen` (regenerate query and schema types), `npm run deploy` (publish the Studio).
+## Content
 
-## How content gets to the page
+Content lives in `src/data/`, one module per area. `index.astro` imports it and passes typed props down; only `Layout.astro` imports `settings` itself.
 
-`src/pages/index.astro` runs the one GROQ query, `pageQuery` in `src/lib/queries.ts`, at build time and passes typed props down. Components never fetch.
+| Module        | Holds                                                                                |
+| ------------- | ------------------------------------------------------------------------------------ |
+| `settings.ts` | `<head>`: tab title, meta description, favicon, link-preview image (1200×630)        |
+| `home.ts`     | Page title ("Name — Role"), hero, About, CV, experience, profile links, email, Contact |
+| `skills.ts`   | Skill names and their icons                                                          |
+| `projects.ts` | Pet projects; the first screenshot is the cover                                      |
+| `manga.ts`    | Manga strips, each with four panels and their alt text                               |
 
-- The result types (`Settings`, `Home`, `Manga`) come from `src/sanity/types.ts`, which Sanity TypeGen generates.
-- After changing the query or a schema, run `npm run typegen` in `cms/` and commit the regenerated file. Vercel builds only the frontend, so it can't generate it.
-
-The output is static, so publishing in the Studio only shows up after a rebuild (Sanity webhook → Vercel deploy hook). Never hardcode copy that belongs in the CMS. To change a field end to end, follow the `sanity-content` skill.
-
-`homePage.featuredManga1`–`3` are manga strips placed between sections (after About, after Experience & skills, after Pet projects). A slot can be empty, and then that strip doesn't render.
+- Files go in `src/assets/` and are imported statically, so a missing or misspelled file fails the build.
+  - Images: commit the PNG/JPG original. Astro generates the resized AVIF/WebP at build time.
+  - Skill icons: single-colour SVGs imported as Astro SVG components; CSS fills them with the brand blue.
+  - CV: `daria-artemova-cv.pdf`, imported with `?url`, so its URL is hashed and changes with each new version.
+- Multi-paragraph text is a `string[]`, one string per paragraph.
+- Manga strips are placed in `index.astro` between sections: after About, after Experience & skills, and optionally a third after Pet projects.
+- Keep content (copy, links, images) in `src/data/`. Components hold only interface text such as nav labels and button text.
+- A content change goes live with the next deploy, which Vercel runs on every push to `main`.
 
 ## Conventions
 
 - Astro components with a scoped `<style>` block; site-wide tokens, resets and utilities live in `src/styles/global.css`. Follow the `css` skill for any styling work.
 - Interactivity is a plain `<script>` in the component. No React or other UI-framework islands.
-- CMS images always go through `sanityImage()` (`src/lib/image.ts`), spread onto the `<img>`. It gives a resized WebP/AVIF `srcset` plus intrinsic `width`/`height`.
+- Raster images always go through `<ResponsiveImage>` (`src/components/ResponsiveImage.astro`), never a bare `<img>` or Astro's `<Image>`. It renders AVIF with a WebP fallback, a `srcset` from the given `widths` plus the image's own width, and intrinsic `width`/`height`.
   - Pass `sizes` matching the image's real rendered width.
-  - The hero (the LCP element) gets `fetchpriority="high"`; every other image gets `loading="lazy" decoding="async"`.
-  - Never use a bare `urlFor(image).url()` in markup.
+  - The hero (the LCP element) gets `priority`, which sets `fetchpriority="high"`; every other image lazy-loads by default.
+  - The `<picture>` wrapper is `display: contents` (`global.css`), so style the image through the `class` you pass, which lands on the `<img>`.
 - The font is Open Sans Variable, self-hosted through `@fontsource-variable/open-sans` and imported in `Layout.astro`, which also preloads the Latin file. Don't add Google Fonts links.
-- Static assets in `public/` stay small: prefer WebP (the ink texture is lossless WebP). CSS is inlined into the HTML (`build.inlineStylesheets: "always"`).
-- Icons are `.astro` SVG components in `src/components/icons/`, using `fill="currentColor"` and `aria-hidden="true"`. Skill icons uploaded to the CMS are inlined at build time through `inlineSvg` (`src/lib/svg.ts`), which strips anything executable.
+- Static assets in `public/` stay small: prefer WebP (the ink texture is lossless WebP). Content files belong in `src/assets/`, not `public/`, so Astro optimises and hashes them. CSS is inlined into the HTML (`build.inlineStylesheets: "always"`).
+- Icons are `.astro` SVG components in `src/components/icons/`, using `fill="currentColor"` and `aria-hidden="true"`. Skill icons are plain SVG files in `src/assets/skills/`, rendered with `aria-hidden="true"`.
 - Analytics is Vercel Web Analytics. To track a click, add `data-track="event_name"` and optional `data-track-<prop>="value"` to the element; a single listener in `src/lib/analytics.ts` sends it. Never send visitor data.
 - The design is light-only on purpose: two full-page texture overlays (`body::before`/`::after`) multiply over everything.
 
 ## Definition of done
 
-1. `npm run build` passes in `frontend-astro/` (and `npm run build` in `cms/` for schema changes).
+1. `npm run build` passes in `frontend-astro/`.
 2. Screenshots at 1440×900 and 390×844 look right: compared with the previous state, or with the design frame when implementing a design. See the `verify-ui` skill.
 3. `npm run a11y` reports no new violations, and a keyboard pass works (visible focus, logical order, the mobile menu traps focus and closes on Esc).
 
@@ -67,3 +76,5 @@ Never run `git commit` or `git push`; the user reviews and commits everything. F
 - `html` has `scroll-behavior: smooth`. Scripts that scroll must pass `behavior: "instant"`, or screenshots catch the page mid-scroll.
 - `/_vercel/insights/script.js` 404s locally. That's expected; it only exists on Vercel.
 - `vercel.json` permanently redirects (308) every extensionless path to `/`. Switch it to `permanent: false` before adding any new route, because browsers cache 308s.
+- Astro copies HTML comments (`<!-- -->`) in a template into the page, once per render. Use `{/* */}` or a frontmatter comment for notes about the code.
+- Everything in `src/assets/` is public twice: on the site and in this public repo's history. Deleting a file later doesn't remove it from history, so only add what's meant to be published.

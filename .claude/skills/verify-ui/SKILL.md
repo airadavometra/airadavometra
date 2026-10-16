@@ -1,6 +1,6 @@
 ---
 name: verify-ui
-description: Build, run and check the portfolio site visually and for accessibility. Use after any change to frontend-astro components, styles or content queries, when implementing a design frame, or when asked to screenshot, run or check the site.
+description: Build, run and check the portfolio site visually and for accessibility. Use after any change to frontend-astro components, styles or content (src/data, src/assets), when implementing a design frame, or when asked to screenshot, run or check the site.
 ---
 
 # Verify UI changes
@@ -61,5 +61,6 @@ Add `--preset=desktop` for desktop. Report LCP, CLS and total byte weight agains
 | --- | --- | --- | --- | --- |
 | Oct 2026, before the audit | 61 | 7.2 s | 0.28 | 4.1 MB / 4.1 MB |
 | After Phase 3 (performance) | 96 | 2.6 s | 0 | 560 KB / 401 KB |
+| Content moved from Sanity into the repo (AVIF + WebP) | 96 | 2.6 s | 0 | 450 KB / 362 KB |
 
 Scroll smoothness was measured with a 4× CPU slowdown: 60 fps with or without the full-page texture overlays. Re-measure if you add anything that animates over large areas.

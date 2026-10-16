@@ -1,15 +1,14 @@
 ---
-import { sanityImage } from "../lib/image";
-import type { Home } from "../lib/queries";
+import ResponsiveImage from "./ResponsiveImage.astro";
 import WidthContainer from "./WidthContainer.astro";
 import ExternalLinkIcon from "./icons/ExternalLink.astro";
 import CopyIcon from "./icons/Copy.astro";
 
 interface Props {
-  title: Home["contactSectionTitle"] | undefined;
-  email: Home["email"] | undefined;
-  linkedinLink: Home["linkedinLink"] | undefined;
-  image: Home["contactSectionImage"] | undefined;
+  title: string;
+  email: string;
+  linkedinLink: string;
+  image: ImageMetadata;
 }
 
 const { title, email, linkedinLink, image } = Astro.props;
@@ -18,55 +17,46 @@ const { title, email, linkedinLink, image } = Astro.props;
 <WidthContainer>
   <section id="contact" class="contact-section">
     <div class="info-wrapper">
-      <h2 class="title">{title ?? "You can reach me here"}</h2>
+      <h2 class="title">{title}</h2>
       <div class="links-wrapper">
-        {email && (
-          <button
-            class="contact-link hover-underline js-copy-email"
-            data-email={email}
-            aria-label="Copy email"
-            data-track="email_copy"
-          >
-            <span class="email-container">
-              <span class="email-text js-email-text">{email}</span>
-              <span class="copied-text js-copied-text">Email was copied!</span>
-            </span>
-            <CopyIcon class="icon" />
-          </button>
-        )}
+        <button
+          class="contact-link hover-underline js-copy-email"
+          data-email={email}
+          aria-label="Copy email"
+          data-track="email_copy"
+        >
+          <span class="email-container">
+            <span class="email-text js-email-text">{email}</span>
+            <span class="copied-text js-copied-text">Email was copied!</span>
+          </span>
+          <CopyIcon class="icon" />
+        </button>
 
-        {linkedinLink && (
-          <a
-            href={linkedinLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="contact-link hover-underline"
-            data-track="linkedin_click"
-            data-track-location="contact"
-          >
-            <span>LinkedIn</span>
-            <ExternalLinkIcon class="icon" />
-          </a>
-        )}
+        <a
+          href={linkedinLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="contact-link hover-underline"
+          data-track="linkedin_click"
+          data-track-location="contact"
+        >
+          <span>LinkedIn</span>
+          <ExternalLinkIcon class="icon" />
+        </a>
       </div>
     </div>
 
-    {image && (
-      <div class="contact-image-wrapper">
-        <WidthContainer>
-          <img
-            {...sanityImage(image, {
-              widths: [400, 800, 1200],
-              sizes: "(max-width: 48rem) 100vw, 800px",
-            })}
-            alt=""
-            class="contact-image"
-            loading="lazy"
-            decoding="async"
-          />
-        </WidthContainer>
-      </div>
-    )}
+    <div class="contact-image-wrapper">
+      <WidthContainer>
+        <ResponsiveImage
+          src={image}
+          widths={[400, 800, 1200]}
+          sizes="(max-width: 48rem) 100vw, 800px"
+          alt=""
+          class="contact-image"
+        />
+      </WidthContainer>
+    </div>
   </section>
 </WidthContainer>
 

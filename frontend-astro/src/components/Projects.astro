@@ -1,11 +1,11 @@
 ---
-import { sanityImage } from "../lib/image";
-import type { Home } from "../lib/queries";
+import ResponsiveImage from "./ResponsiveImage.astro";
+import type { Project } from "../data/projects";
 import WidthContainer from "./WidthContainer.astro";
 import ExternalLinkIcon from "./icons/ExternalLink.astro";
 
 interface Props {
-  projects: Home["projects"] | undefined;
+  projects: Project[];
 }
 
 const { projects } = Astro.props;
@@ -16,56 +16,46 @@ const { projects } = Astro.props;
     <h2 class="title">Pet projects</h2>
 
     <ul class="projects-list">
-      {projects?.map((project) => {
-        const screenshots = project.screenshots ?? [];
+      {projects.map((project) => {
+        const { screenshots } = project;
 
         return (
           <li class="project-item">
-            {screenshots.length > 0 && (
-              <div class="gallery js-gallery">
-                {/* One cover per screenshot; the script shows the selected one */}
-                {screenshots.map((screenshot, index) => (
-                  <img
-                    {...sanityImage(screenshot, {
-                      widths: [400, 700, 1000, 1400],
-                      sizes:
-                        "(max-width: 48rem) calc(100vw - 32px), min(688px, calc(50vw - 48px))",
-                    })}
-                    alt={screenshot.alt || `${project.title} screenshot`}
-                    class="project-image js-gallery-cover"
-                    hidden={index > 0}
-                    loading="lazy"
-                    decoding="async"
-                  />
-                ))}
+            <div class="gallery js-gallery">
+              {/* One cover per screenshot; the script shows the selected one */}
+              {screenshots.map((screenshot, index) => (
+                <ResponsiveImage
+                  src={screenshot}
+                  widths={[400, 700, 1000, 1400]}
+                  sizes="(max-width: 48rem) calc(100vw - 32px), min(688px, calc(50vw - 48px))"
+                  alt={`${project.title} screenshot`}
+                  class="project-image js-gallery-cover"
+                  hidden={index > 0}
+                />
+              ))}
 
-                {screenshots.length > 1 && (
-                  <ul class="thumbnails">
-                    {screenshots.map((screenshot, index) => (
-                      <li>
-                        <button
-                          class="thumbnail js-gallery-thumb"
-                          aria-pressed={index === 0 ? "true" : "false"}
-                          aria-label={`Show screenshot ${index + 1} of ${screenshots.length}, ${project.title}`}
-                        >
-                          <img
-                            {...sanityImage(screenshot, {
-                              widths: [150, 300],
-                              sizes:
-                                "(max-width: 48rem) calc((100vw - 56px) / 5), min(131px, calc((50vw - 80px) / 5))",
-                            })}
-                            alt=""
-                            class="thumbnail-image"
-                            loading="lazy"
-                            decoding="async"
-                          />
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-            )}
+              {screenshots.length > 1 && (
+                <ul class="thumbnails">
+                  {screenshots.map((screenshot, index) => (
+                    <li>
+                      <button
+                        class="thumbnail js-gallery-thumb"
+                        aria-pressed={index === 0 ? "true" : "false"}
+                        aria-label={`Show screenshot ${index + 1} of ${screenshots.length}, ${project.title}`}
+                      >
+                        <ResponsiveImage
+                          src={screenshot}
+                          widths={[150, 300]}
+                          sizes="(max-width: 48rem) calc((100vw - 56px) / 5), min(131px, calc((50vw - 80px) / 5))"
+                          alt=""
+                          class="thumbnail-image"
+                        />
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
 
             <div class="project-header">
               <h3 class="project-title">
@@ -91,7 +81,7 @@ const { projects } = Astro.props;
 
             <p class="project-description">{project.description}</p>
 
-            {project.tags && project.tags.length > 0 && (
+            {project.tags.length > 0 && (
               <ul class="project-tags">
                 {project.tags.map((tag) => (
                   <li class="project-tag">{tag}</li>

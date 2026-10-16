@@ -107,6 +107,17 @@ img {
   height: auto;
 }
 
+/* ResponsiveImage wraps each <img> in a <picture> for the AVIF source. Take
+   the wrapper out of layout so the <img> stays the flex or grid item. */
+picture {
+  display: contents;
+}
+/* Otherwise each <source> becomes an empty flex item and adds a gap. Source
+   selection doesn't depend on CSS. */
+picture > source {
+  display: none;
+}
+
 button {
   padding: 0;
   border: none;

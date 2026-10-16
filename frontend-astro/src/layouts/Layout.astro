@@ -5,21 +5,14 @@ import openSansLatin from "@fontsource-variable/open-sans/files/open-sans-latin-
 import "../styles/reset.css";
 import "../styles/global.css";
 import Analytics from "@vercel/analytics/astro";
-import { urlFor } from "../lib/sanity";
-import type { Settings } from "../lib/queries";
+import { settings } from "../data/settings";
 
-interface Props {
-  settings: Settings | null;
-}
-
-const { settings } = Astro.props;
-const title = settings?.siteTitle || "Daria Artemova";
-const metaDescription = settings?.metaDescription;
+const title = settings.siteTitle;
+const metaDescription = settings.metaDescription;
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site).href;
-const faviconUrl = settings?.favicon ? urlFor(settings.favicon).url() : "";
-const shareImageUrl = settings?.shareImage
-  ? urlFor(settings.shareImage).width(1200).height(630).url()
-  : "";
+const faviconUrl = settings.favicon.src;
+// Link previews need an absolute URL
+const shareImageUrl = new URL(settings.shareImage.src, Astro.site).href;
 ---
 
 <!doctype html>
@@ -39,31 +32,22 @@ const shareImageUrl = settings?.shareImage
 
     <!-- SEO -->
     <title>{title}</title>
-    {metaDescription && <meta name="description" content={metaDescription} />}
+    <meta name="description" content={metaDescription} />
     <link rel="canonical" href={canonicalUrl} />
 
     <!-- Favicon -->
-    {faviconUrl && <link rel="icon" href={faviconUrl} />}
+    <link rel="icon" href={faviconUrl} />
 
     <!-- Open Graph (link previews) -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:title" content={title} />
-    {metaDescription && (
-      <meta property="og:description" content={metaDescription} />
-    )}
-    {shareImageUrl && (
-      <>
-        <meta property="og:image" content={shareImageUrl} />
-        <meta property="og:image:width" content="1200" />
-        <meta property="og:image:height" content="630" />
-      </>
-    )}
+    <meta property="og:description" content={metaDescription} />
+    <meta property="og:image" content={shareImageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <!-- X uses the Open Graph tags above, but needs this for the big image -->
-    <meta
-      name="twitter:card"
-      content={shareImageUrl ? "summary_large_image" : "summary"}
-    />
+    <meta name="twitter:card" content="summary_large_image" />
 
     <slot name="head" />
   </head>
