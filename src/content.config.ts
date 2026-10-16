@@ -1,4 +1,5 @@
-import { defineCollection, z } from "astro:content";
+import { defineCollection } from "astro:content";
+import { z } from "astro/zod";
 import { glob } from "astro/loaders";
 
 // The page's content lives in Markdown files in src/content/. A file's body is
@@ -20,9 +21,9 @@ const home = defineCollection({
       }),
       experienceYears: z.number(),
       skills: z.array(z.object({ name: z.string(), icon: z.string() })),
-      githubLink: z.string().url(),
-      linkedinLink: z.string().url(),
-      email: z.string().email(),
+      githubLink: z.url(),
+      linkedinLink: z.url(),
+      email: z.email(),
       contact: z.object({ title: z.string(), image: image() }),
     }),
 });
@@ -44,7 +45,7 @@ const projects = defineCollection({
       title: z.string(),
       year: z.coerce.string(),
       /** Without a link the title is plain text */
-      link: z.string().url().optional(),
+      link: z.url().optional(),
       tags: z.array(z.string()),
       /** The first is the cover; the thumbnail strip only shows with two or more */
       screenshots: z.array(image()).min(1),

@@ -14,22 +14,23 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@fontsource-variable/open-sans": "^5.3.0",
-    "@iconify-json/devicon-plain": "^1.2.62",
-    "@iconify-json/icomoon-free": "^1.2.1",
-    "@iconify-json/ph": "^1.2.2",
-    "@iconify-json/simple-icons": "^1.2.100",
-    "@vercel/analytics": "^1.6.1",
-    "astro": "^5.17.1",
-    "astro-icon": "^1.2.0"
+    "@astrojs/markdown-satteri": "0.4.4",
+    "@fontsource-variable/open-sans": "5.3.0",
+    "@iconify-json/devicon-plain": "1.2.62",
+    "@iconify-json/icomoon-free": "1.2.1",
+    "@iconify-json/ph": "1.2.2",
+    "@iconify-json/simple-icons": "1.2.100",
+    "@vercel/analytics": "1.6.1",
+    "astro": "7.4.0",
+    "astro-icon": "1.2.0"
   },
   "devDependencies": {
-    "@astrojs/check": "^0.9.10",
-    "@axe-core/playwright": "^4.13.0",
-    "playwright": "^1.64.0",
-    "prettier": "^3.9.10",
-    "prettier-plugin-astro": "^1.1.1",
-    "sharp": "^0.35.5",
-    "typescript": "^5.9.3"
+    "@astrojs/check": "0.9.10",
+    "@axe-core/playwright": "4.13.0",
+    "playwright": "1.64.0",
+    "prettier": "3.9.10",
+    "prettier-plugin-astro": "1.1.1",
+    "sharp": "0.35.5",
+    "typescript": "5.9.3"
   }
 }

@@ -11,7 +11,7 @@ All commands run from the repo root. Keep screenshots and reports in the scratch
 
 ```sh
 npm run build                         # astro check + astro build
-npx astro preview --port 4321         # run in the background; serves dist/
+npx astro preview --background         # serves dist/ on :4321; stop with `npx astro preview stop`
 ```
 
 Wait until `curl -s -o /dev/null -w "%{http_code}" http://localhost:4321` returns 200. Rebuild after every change: preview serves `dist/`, not the sources.

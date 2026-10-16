@@ -4,7 +4,7 @@ Daria Artemova's one-page portfolio. All copy and images live in the repo; the s
 
 ## Layout
 
-The repo root is the Astro 5 site (npm): one page (`src/pages/index.astro`) built from section components in `src/components/`.
+The repo root is the Astro 7 site (npm): one page (`src/pages/index.astro`) built from section components in `src/components/`.
 
 - `src/content/`: the content, as Markdown files. Their schemas are in `src/content.config.ts`.
 - `src/assets/`: the images the content points to, plus the link-preview image and CV.
@@ -38,7 +38,7 @@ Content lives in Markdown files in `src/content/`: frontmatter for the fields, a
 - Image paths in frontmatter are relative to the Markdown file (for example `../../assets/projects/x.png`). Commit the PNG/JPG original; Astro generates the resized AVIF/WebP at build time.
 - The link-preview image (1200×630) and CV (`daria-artemova-cv.pdf`) are fixed files in `src/assets/`, imported by `Layout.astro` and `index.astro`. Replace a file to update it. The CV's URL is hashed, so it changes with each version.
 - The icon is ダ in Noto Sans JP Bold, ink `--black`, on a `--blue` circle. `public/favicon.svg` is the source (the letter is an outline, so no font is needed); `favicon.ico` (16/32/48px) and `apple-touch-icon.png` (180px, the circle on `--white`, since iOS needs an opaque square) are rendered from it.
-- `markdown.smartypants` is off, so text renders exactly as typed (no automatic curly quotes or dashes).
+- Smart punctuation is off (`smartPunctuation: false` on the Sätteri Markdown processor in `astro.config.mjs`), so text renders exactly as typed (no automatic curly quotes or dashes).
 - Keep content (copy, links, images) in `src/content/`. Components hold only interface text such as nav labels and button text.
 - A content change goes live with the next deploy, which Vercel runs on every push to `main`.
 
@@ -59,6 +59,12 @@ Content lives in Markdown files in `src/content/`: frontmatter for the fields, a
   - A new pack is `npm install @iconify-json/<pack>`. For an icon no pack has, add the SVG to `src/icons/` and use its file name (`name="my-icon"`).
 - Analytics is Vercel Web Analytics. To track a click, add `data-track="event_name"` and optional `data-track-<prop>="value"` to the element; a single listener in `src/lib/analytics.ts` sends it. Never send visitor data.
 - The design is light-only on purpose: two full-page texture overlays (`body::before`/`::after`) multiply over everything.
+
+## Dependencies
+
+- Every dependency in `package.json` is pinned to an exact version: never write a `^` or `~` range. `.npmrc` sets `save-exact=true`, so `npm install <pkg>` pins on its own.
+- Upgrade on purpose, one package (or one related group) at a time: `npm install <pkg>@<version>`, read its changelog or upgrade guide for breaking changes, then run the definition of done.
+- `@astrojs/markdown-satteri` (imported in `astro.config.mjs`) is also a dependency of `astro`, which pins its own copy. When upgrading Astro, set it to the version `astro` uses (`npm view astro@<version> dependencies`) so only one copy is installed.
 
 ## Definition of done
 
@@ -83,5 +89,6 @@ Never run `git commit` or `git push`; the user reviews and commits everything. F
 - `html` has `scroll-behavior: smooth`. Scripts that scroll must pass `behavior: "instant"`, or screenshots catch the page mid-scroll.
 - `/_vercel/insights/script.js` 404s locally. That's expected; it only exists on Vercel.
 - `vercel.json` permanently redirects (308) every extensionless path to `/`. Switch it to `permanent: false` before adding any new route, because browsers cache 308s.
+- Templates follow JSX whitespace rules (Astro 7's `compressHTML: "jsx"` default): a line break between two inline elements, or between an icon and its label, renders as nothing. Space them with flex `gap`, or write `{" "}` for a real space.
 - Astro copies HTML comments (`<!-- -->`) in a template into the page, once per render. Use `{/* */}` or a frontmatter comment for notes about the code.
 - Everything in `src/assets/` is public twice: on the site and in this public repo's history. Deleting a file later doesn't remove it from history, so only add what's meant to be published.

@@ -1,4 +1,5 @@
 import { defineConfig } from "astro/config";
+import { satteri } from "@astrojs/markdown-satteri";
 import icon from "astro-icon";
 
 // https://astro.build/config
@@ -9,7 +10,7 @@ export default defineConfig({
   markdown: {
     // Keep content text exactly as typed: no automatic curly quotes or dashes
     // (the type coercion quiz text needs its straight "2").
-    smartypants: false,
+    processor: satteri({ features: { smartPunctuation: false } }),
   },
   // The production address, used for the canonical URL and og:url. Vercel
   // redirects the version without www here.
