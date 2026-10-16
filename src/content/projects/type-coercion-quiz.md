@@ -5,7 +5,11 @@ link: https://type-coercion-quiz.vercel.app/
 tags: [React, TypeScript, Vite]
 # The first screenshot is the cover
 screenshots:
-  - ../../assets/projects/type-coercion-quiz.png
+  - ../../assets/projects/type-coercion-quiz-1.png
+  - ../../assets/projects/type-coercion-quiz-2.png
+  - ../../assets/projects/type-coercion-quiz-3.png
+  - ../../assets/projects/type-coercion-quiz-4.png
+  - ../../assets/projects/type-coercion-quiz-5.png
 order: 5
 ---
 

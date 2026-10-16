@@ -5,7 +5,11 @@ link: https://family-tree-tau.vercel.app/
 tags: [React, TypeScript, Next.js]
 # The first screenshot is the cover
 screenshots:
-  - ../../assets/projects/family-tree.png
+  - ../../assets/projects/family-tree-1.png
+  - ../../assets/projects/family-tree-2.png
+  - ../../assets/projects/family-tree-3.png
+  - ../../assets/projects/family-tree-4.png
+  - ../../assets/projects/family-tree-5.png
 order: 6
 ---
 
