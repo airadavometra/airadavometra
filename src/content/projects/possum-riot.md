@@ -5,7 +5,11 @@ link: https://www.possumriot.com/
 tags: [React, TypeScript, Next.js, Sanity, Copilot]
 # The first screenshot is the cover
 screenshots:
-  - ../../assets/projects/possum-riot.png
+  - ../../assets/projects/possum-riot-1.png
+  - ../../assets/projects/possum-riot-2.png
+  - ../../assets/projects/possum-riot-3.png
+  - ../../assets/projects/possum-riot-4.png
+  - ../../assets/projects/possum-riot-5.png
 order: 4
 ---
 
