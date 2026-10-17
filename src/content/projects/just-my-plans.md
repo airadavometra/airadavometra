@@ -1,7 +1,7 @@
 ---
 title: Just my plans
 year: 2024
-tags: [React, TypeScript, Vite, PWA, Zustand, TinyBase, Cloudflare Workers, Firebase Auth]
+tags: [React, TypeScript, Vite, PWA, Zustand, TinyBase]
 # The first screenshot is the cover
 screenshots:
   - ../../assets/projects/just-my-plans-1.png

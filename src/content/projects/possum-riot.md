@@ -2,7 +2,7 @@
 title: Possum Riot website
 year: 2025
 link: https://www.possumriot.com/
-tags: [React, TypeScript, Next.js, Sanity, Copilot]
+tags: [Astro, TypeScript]
 # The first screenshot is the cover
 screenshots:
   - ../../assets/projects/possum-riot-1.png

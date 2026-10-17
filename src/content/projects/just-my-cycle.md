@@ -1,7 +1,7 @@
 ---
 title: Just my cycle
 year: 2025
-tags: [React, TypeScript, Vite, PWA, Zustand, TinyBase, Cloudflare Workers, Firebase Auth]
+tags: [React, TypeScript, Vite, PWA, Zustand, TinyBase]
 # The first screenshot is the cover
 screenshots:
   - ../../assets/projects/just-my-cycle-1.png
